@@ -1,0 +1,93 @@
+<div class="space-y-8">
+  <!-- Header Info Rute: Wayfind Transit Plate -->
+  <div class="transit-box p-6 sm:p-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-bar border-rule pb-6">
+      <div>
+        <div class="inline-block px-2.5 py-0.5 mb-2 border-hair border-rule text-xs font-bold uppercase text-accent bg-paper-3">
+          Rute Perjalanan Terjadwal
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight uppercase">
+          <%= schedule.kota_asal %> &rarr; <%= schedule.kota_tujuan %>
+        </h1>
+        <p class="mt-1 text-xs text-muted">
+          <% const d = new Date(schedule.berangkat_pada); %>
+          Keberangkatan: <strong class="text-ink"><%= d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) %>, <%= d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) %> WIB</strong>
+        </p>
+      </div>
+
+      <div class="text-left md:text-right">
+        <span class="text-[11px] text-muted uppercase font-bold block">Tarif per Penumpang</span>
+        <span class="text-2xl font-extrabold text-ink num">
+          <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(schedule.harga) %>
+        </span>
+        <span class="text-xs text-muted block mt-0.5">Armada: <%= schedule.kendaraan_jenis || 'Minibus' %> (<%= schedule.nomor_polisi %>)</span>
+      </div>
+    </div>
+
+    <!-- Status Kursi Signage -->
+    <div class="mt-4 flex flex-wrap items-center gap-6 text-xs font-bold">
+      <div class="flex items-center gap-2">
+        <span class="w-3.5 h-3.5 bg-paper-3 border-bar border-rule"></span>
+        <span class="text-ink">Tersedia</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3.5 h-3.5 bg-ink border-bar border-ink"></span>
+        <span class="text-ink">Pilihan Anda</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3.5 h-3.5 bg-accent-2 border-bar border-ink"></span>
+        <span class="text-ink">Hold 15 Menit</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3.5 h-3.5 bg-paper-2 border-bar border-rule opacity-40"></span>
+        <span class="text-muted">Terjual</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Pemesanan & Denah Kabin -->
+  <form action="/booking/<%= schedule.id %>/checkout" method="POST" id="booking-form" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div id="selected-seats-container"></div>
+
+    <!-- Kolom Denah Kursi Minibus -->
+    <div class="lg:col-span-5">
+      <div class="transit-box p-6 sticky top-20">
+        <h2 class="text-xs font-extrabold text-ink uppercase tracking-wider mb-4 border-b-hair border-rule pb-2">Pilih Kursi Kabin</h2>
+        <%- include('../partials/seat-layout', { seats, schedule }) %>
+      </div>
+    </div>
+
+    <!-- Kolom Data Penumpang & Ringkasan Tarif -->
+    <div class="lg:col-span-7 space-y-6">
+      <div class="transit-box p-6">
+        <h2 class="text-xs font-extrabold text-ink uppercase tracking-wider mb-2">Data Identitas Penumpang</h2>
+        <p class="text-xs text-muted mb-4">Klik satu atau beberapa kursi yang tersedia pada denah kabin.</p>
+        
+        <div id="passenger-forms">
+          <div class="text-center py-10 border-bar border-dashed border-rule text-muted text-xs font-bold uppercase">
+            Silakan pilih minimal 1 kursi pada denah kabin di sebelah kiri.
+          </div>
+        </div>
+      </div>
+
+      <!-- Ringkasan & Tombol Reservasi -->
+      <div class="transit-box p-6">
+        <div class="flex items-center justify-between py-2 border-b-bar border-rule">
+          <span class="text-xs font-bold uppercase text-muted">Total Pembayaran Tiket:</span>
+          <span id="total-price-display" class="text-2xl font-extrabold text-ink num">Rp 0</span>
+        </div>
+
+        <p class="text-xs text-muted my-4">
+          * Kursi akan dikunci atomik selama <strong>15 menit</strong> setelah menekan tombol konfirmasi.
+        </p>
+
+        <button type="submit" id="submit-booking-btn" disabled class="w-full transit-btn transit-btn-cobalt py-3.5 text-xs font-bold uppercase">
+          Lanjutkan ke Pembayaran
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script src="/js/seat-selection.js"></script>

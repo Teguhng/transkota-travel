@@ -1,0 +1,113 @@
+/* Hallmark · shape: app screen · genre: modern-minimal · theme: Wayfind (by request) · redesign: full
+ * nav: edge-aligned transit header with platform/night switch · signature: physical departure board and tactile 5-seat cabin tiles · states: active focus disabled pressed · wayfind: platform
+ * axes: light/mono/cool · posture: committed · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: R, transit borders and tabular nums replace rounded dev cards */
+@import url("./tokens.css");
+@import url("./base.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Wayfind Transit Signage Components */
+  .transit-box {
+    border: var(--rule-bar) solid var(--color-rule);
+    background-color: var(--color-paper-3);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .transit-plate {
+    border: var(--rule-bar) solid var(--color-rule);
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    border-radius: var(--radius-btn);
+  }
+
+  .transit-plate-amber {
+    border: var(--rule-bar) solid var(--color-rule);
+    background-color: var(--color-accent-2);
+    color: var(--color-amber-ink);
+    border-radius: var(--radius-btn);
+  }
+
+  .transit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-md);
+    border: var(--rule-bar) solid transparent;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    line-height: 1.25;
+    border-radius: var(--radius-btn);
+    transition: background-color var(--dur-micro) ease, transform var(--dur-micro) ease, box-shadow var(--dur-micro) ease;
+  }
+  .transit-btn:active {
+    transform: translateY(1px);
+  }
+
+  .transit-btn-cobalt {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+  .transit-btn-cobalt:hover {
+    filter: brightness(1.08);
+  }
+
+  .transit-btn-ink {
+    background-color: transparent;
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+  .transit-btn-ink:hover {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .seat-tile {
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: var(--rule-bar) solid var(--color-rule);
+    background-color: var(--color-paper-3);
+    color: var(--color-ink);
+    font-weight: 800;
+    font-family: var(--font-display);
+    border-radius: var(--radius-card);
+    transition: background-color var(--dur-micro) steps(1), border-color var(--dur-micro) steps(1);
+  }
+  .seat-tile:active {
+    transform: translateY(1px);
+  }
+}
+
+/* Print Stylesheet (@media print) for Transit Tickets & Receipts */
+@media print {
+  body {
+    background: var(--color-paper-3) !important;
+    color: var(--color-ink) !important;
+    font-size: 11pt;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .ticket-card {
+    border: var(--rule-bar) solid var(--color-ink) !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    max-width: 100% !important;
+    background: var(--color-paper-3) !important;
+    color: var(--color-ink) !important;
+  }
+}

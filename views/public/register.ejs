@@ -1,0 +1,74 @@
+<div class="max-w-lg mx-auto my-8">
+  <div class="transit-box p-6 sm:p-8">
+    <div class="text-center">
+      <div class="w-12 h-12 transit-plate mx-auto flex items-center justify-center font-extrabold text-xl mb-4">
+        +
+      </div>
+      <h1 class="text-xl font-extrabold text-ink uppercase tracking-tight">Registrasi Penumpang Baru</h1>
+      <p class="mt-2 text-xs text-muted">Akses pemesanan tiket antarkota dan pemilihan kursi kabin 5 penumpang.</p>
+    </div>
+
+    <form action="/register" method="POST" class="mt-6 space-y-4">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div>
+        <label for="nama" class="block text-xs font-bold uppercase text-ink mb-1.5">Nama Lengkap (Sesuai KTP) *</label>
+        <input type="text" id="nama" name="nama" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="Contoh: Budi Santoso">
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="username" class="block text-xs font-bold uppercase text-ink mb-1.5">Username *</label>
+          <input type="text" id="username" name="username" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="budisantoso">
+        </div>
+
+        <div>
+          <label for="telepon" class="block text-xs font-bold uppercase text-ink mb-1.5">Nomor Telepon (WhatsApp) *</label>
+          <input type="tel" id="telepon" name="telepon" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="081234567890">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="email" class="block text-xs font-bold uppercase text-ink mb-1.5">Alamat Email *</label>
+          <input type="email" id="email" name="email" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="budi@example.com">
+        </div>
+
+        <div>
+          <label for="jenis_kelamin" class="block text-xs font-bold uppercase text-ink mb-1.5">Jenis Kelamin</label>
+          <select id="jenis_kelamin" name="jenis_kelamin" class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent">
+            <option value="L">Laki-laki</option>
+            <option value="P">Perempuan</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="alamat" class="block text-xs font-bold uppercase text-ink mb-1.5">Alamat Domisili</label>
+        <textarea id="alamat" name="alamat" rows="2" class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="Kota / Alamat tempat tinggal"></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="password" class="block text-xs font-bold uppercase text-ink mb-1.5">Kata Sandi *</label>
+          <input type="password" id="password" name="password" required minlength="6" class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="Minimal 6 karakter">
+        </div>
+
+        <div>
+          <label for="password_confirm" class="block text-xs font-bold uppercase text-ink mb-1.5">Ulangi Kata Sandi *</label>
+          <input type="password" id="password_confirm" name="password_confirm" required minlength="6" class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="Ulangi kata sandi">
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" class="w-full transit-btn transit-btn-cobalt py-3 text-xs">
+          Daftar Member
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-6 pt-6 border-t-hair border-rule text-center text-xs text-muted">
+      Sudah memiliki akun? <a href="/login" class="font-bold text-accent hover:underline">Masuk ke Akun</a>
+    </div>
+  </div>
+</div>

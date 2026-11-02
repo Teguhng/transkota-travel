@@ -1,0 +1,129 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between border-b-bar border-rule pb-4">
+    <div>
+      <a href="/operator/verifikasi" class="text-xs font-bold uppercase text-accent hover:underline inline-flex items-center gap-1 mb-1">
+        &larr; Antrean Verifikasi
+      </a>
+      <h1 class="text-xl sm:text-2xl font-extrabold text-ink uppercase tracking-tight">Pemeriksaan Bukti Transfer</h1>
+    </div>
+    <span class="font-mono text-xs font-bold px-3 py-1 border-bar border-rule bg-paper-3 text-ink">
+      ID Transaksi #<%= payment.id %>
+    </span>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Kolom Penampil Berkas Resi (Zoom / Rotate) -->
+    <div class="lg:col-span-7 space-y-4">
+      <div class="transit-box p-4">
+        <div class="flex items-center justify-between pb-3 border-b-bar border-rule mb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-muted">Berkas Bukti Transfer</span>
+          
+          <!-- Tombol Alat Preview -->
+          <div class="flex items-center gap-1">
+            <button type="button" id="btn-zoom-in" class="transit-btn transit-btn-ink py-1 px-2.5 text-xs font-bold" title="Perbesar">
+              + Zoom
+            </button>
+            <button type="button" id="btn-zoom-out" class="transit-btn transit-btn-ink py-1 px-2.5 text-xs font-bold" title="Perkecil">
+              - Zoom
+            </button>
+            <button type="button" id="btn-rotate-receipt" class="transit-btn transit-btn-ink py-1 px-2.5 text-xs font-bold" title="Putar 90 Derajat">
+              Rotate
+            </button>
+            <button type="button" id="btn-reset-preview" class="transit-btn py-1 px-2.5 text-xs font-bold text-muted border-hair border-rule" title="Atur Ulang">
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Image Container with overflow clip and center alignment -->
+        <div class="overflow-hidden bg-paper-3 border-bar border-rule min-h-[350px] max-h-[500px] flex items-center justify-center p-4">
+          <img id="receipt-preview-img"
+               src="/operator/pembayaran/<%= payment.id %>/bukti"
+               alt="Bukti Transfer Pembayaran #<%= payment.id %>"
+               class="max-w-full max-h-[460px] object-contain transition-transform duration-200 cursor-grab"
+               style="transform-origin: center center;" />
+        </div>
+        <p class="text-[11px] text-muted text-center mt-2">Gunakan alat di atas jika berkas foto terbalik atau teks transaksi buram.</p>
+      </div>
+    </div>
+
+    <!-- Kolom Rincian Pesanan & Formulir Tindakan -->
+    <div class="lg:col-span-5 space-y-6">
+      <div class="transit-box p-6 space-y-4">
+        <h2 class="text-xs font-extrabold uppercase tracking-wider text-ink border-b-bar border-rule pb-2">
+          Rincian Transaksi
+        </h2>
+
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between">
+            <span class="text-muted uppercase font-bold">Kode Booking:</span>
+            <span class="font-mono font-extrabold text-accent"><%= booking?.kode_booking %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted uppercase font-bold">Rute:</span>
+            <span class="font-bold text-ink uppercase"><%= booking?.kota_asal %> &rarr; <%= booking?.kota_tujuan %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted uppercase font-bold">Total Tagihan:</span>
+            <span class="text-base font-extrabold text-ink num">
+              <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(booking?.total_harga || booking?.total || payment.nominal || 0) %>
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted uppercase font-bold">Nomor Referensi:</span>
+            <span class="font-mono font-bold text-ink"><%= payment.referensi %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted uppercase font-bold">Rekening Pengirim:</span>
+            <span class="font-mono font-bold text-ink"><%= payment.no_rek_pengirim %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-muted uppercase font-bold">Waktu Pengajuan:</span>
+            <span class="text-muted"><%= new Date(payment.diajukan_pada || payment.created_at || Date.now()).toLocaleString('id-ID') %></span>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t-bar border-rule">
+          <span class="text-xs font-bold text-muted uppercase tracking-wider block mb-2">Penumpang Terdaftar:</span>
+          <% 
+            const manifest = (booking?.details && booking.details.length > 0) ? booking.details : (booking?.penumpang || []); 
+          %>
+          <div class="space-y-1">
+            <% manifest.forEach(p => { %>
+              <div class="flex items-center justify-between text-xs bg-paper-3 p-2 border-hair border-rule">
+                <span class="font-bold text-ink"><%= p.nama_penumpang || p.nama %></span>
+                <span class="font-mono font-bold text-accent">Kursi <%= p.nomor_kursi || p.nomor %></span>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulir Eksekusi Keputusan -->
+      <div class="transit-box p-6 space-y-4">
+        <h2 class="text-xs font-extrabold uppercase tracking-wider text-ink">Keputusan Validasi</h2>
+        
+        <form action="/operator/verifikasi/<%= payment.id %>/proses" method="POST" class="space-y-4">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div>
+            <label for="alasan_penolakan" class="block text-xs font-bold uppercase text-ink mb-1.5">Alasan Penolakan (Hanya jika menolak)</label>
+            <input type="text" id="alasan_penolakan" name="alasan_penolakan" placeholder="Nominal transfer kurang / struk tidak terbaca" class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-2">
+            <button type="submit" name="aksi" value="tolak" onclick="return confirm('Apakah Anda yakin ingin menolak bukti pembayaran ini?');" class="transit-btn transit-btn-ink py-2.5 text-xs font-bold">
+              Tolak Struk
+            </button>
+
+            <button type="submit" name="aksi" value="terima" class="transit-btn transit-btn-cobalt py-2.5 text-xs font-bold">
+              Setujui Tiket
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/image-preview.js"></script>

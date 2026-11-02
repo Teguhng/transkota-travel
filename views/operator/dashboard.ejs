@@ -1,0 +1,68 @@
+<div class="space-y-8">
+  <!-- Header Banner -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-bar border-rule pb-4">
+    <div>
+      <div class="inline-block px-2.5 py-0.5 mb-1 border-hair border-rule text-xs font-bold uppercase text-accent bg-paper-3">
+        Operasional Loket
+      </div>
+      <h1 class="text-xl sm:text-2xl font-extrabold text-ink uppercase tracking-tight">Terminal Loket & Kasir</h1>
+      <p class="text-xs text-muted mt-1">Verifikasi pembayaran transfer bank dan transaksi kasir tunai walk-in.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="/operator/walkin" class="transit-btn transit-btn-cobalt py-2 px-4 text-xs font-bold">
+        + Kasir Walk-in (Tunai)
+      </a>
+      <a href="/operator/verifikasi" class="transit-btn transit-btn-ink py-2 px-4 text-xs font-bold">
+        Antrean Verifikasi (<%= pendingCount %>)
+      </a>
+    </div>
+  </div>
+
+  <!-- Metric Cards: Wayfind Transit Boxes -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="transit-box p-6">
+      <div class="flex items-center justify-between border-b-hair border-rule pb-2">
+        <span class="text-xs font-bold uppercase text-muted">Menunggu Verifikasi</span>
+        <span class="px-2 py-0.5 border-bar border-ink bg-accent-2 text-ink text-xs font-bold">
+          !
+        </span>
+      </div>
+      <div class="mt-4 flex items-baseline gap-2">
+        <span class="text-3xl font-extrabold text-ink num"><%= pendingCount %></span>
+        <span class="text-xs text-muted uppercase font-bold">Struk Transfer</span>
+      </div>
+      <a href="/operator/verifikasi" class="mt-4 inline-block text-xs font-bold text-accent uppercase hover:underline">
+        Buka antrean
+      </a>
+    </div>
+
+    <div class="transit-box p-6">
+      <div class="flex items-center justify-between border-b-hair border-rule pb-2">
+        <span class="text-xs font-bold uppercase text-muted">Total Transaksi Tiket</span>
+        <span class="px-2 py-0.5 border-hair border-rule text-ink text-xs font-bold">
+          #
+        </span>
+      </div>
+      <div class="mt-4 flex items-baseline gap-2">
+        <span class="text-3xl font-extrabold text-ink num"><%= totalOrders %></span>
+        <span class="text-xs text-muted uppercase font-bold">Keseluruhan</span>
+      </div>
+      <a href="/operator/orders" class="mt-4 inline-block text-xs font-bold text-accent uppercase hover:underline">
+        Lihat seluruh tiket
+      </a>
+    </div>
+
+    <div class="transit-box p-6">
+      <div class="flex items-center justify-between border-b-hair border-rule pb-2">
+        <span class="text-xs font-bold uppercase text-muted">Moda Loket Aktif</span>
+        <span class="px-2 py-0.5 border-hair border-rule text-accent text-xs font-bold">
+          ONLINE
+        </span>
+      </div>
+      <div class="mt-4">
+        <span class="text-base font-extrabold text-ink uppercase block">Sistem Loket Normal</span>
+        <span class="text-xs text-muted">Siap melayani penumpang fisik dan verifikasi transfer.</span>
+      </div>
+    </div>
+  </div>
+</div>

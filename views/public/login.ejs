@@ -1,0 +1,48 @@
+<div class="max-w-md mx-auto my-8">
+  <div class="transit-box p-6 sm:p-8">
+    <div class="text-center">
+      <div class="w-12 h-12 transit-plate mx-auto flex items-center justify-center font-extrabold text-xl mb-4">
+        T
+      </div>
+      <h1 class="text-xl font-extrabold text-ink uppercase tracking-tight">Otentikasi Pengguna</h1>
+      <p class="mt-2 text-xs text-muted">Masukkan username, alamat email, atau nomor telepon terdaftar.</p>
+    </div>
+
+    <form action="/login" method="POST" class="mt-6 space-y-4">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <% if (typeof redirect !== 'undefined' && redirect) { %>
+        <input type="hidden" name="redirect" value="<%= redirect %>">
+      <% } %>
+
+      <div>
+        <label for="identifier" class="block text-xs font-bold uppercase text-ink mb-1.5">Username / Email / Telepon</label>
+        <input type="text" id="identifier" name="identifier" required autofocus class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="aziz atau 08123456789">
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <label for="password" class="block text-xs font-bold uppercase text-ink">Kata Sandi</label>
+          <a href="/auth/activate" class="text-xs font-bold text-accent hover:underline">Aktivasi / Reset?</a>
+        </div>
+        <input type="password" id="password" name="password" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="••••••••">
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" class="w-full transit-btn transit-btn-cobalt py-3 text-xs">
+          Masuk ke Akun
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-6 pt-6 border-t-hair border-rule text-center text-xs text-muted">
+      Belum memiliki akun? <a href="/register" class="font-bold text-accent hover:underline">Daftar Member</a>
+    </div>
+
+    <div class="mt-4 p-3 border-hair border-rule bg-paper-3 text-xs text-muted">
+      <span class="font-bold uppercase text-ink block mb-1">Akun Pengguna Demo:</span>
+      <div>Pelanggan: <code class="font-bold text-ink">aziz</code> / <code class="text-ink">Password123!</code></div>
+      <div>Operator Loket: <code class="font-bold text-ink">operator_1</code> / <code class="text-ink">Password123!</code></div>
+      <div>Administrator: <code class="font-bold text-ink">admin_1</code> / <code class="text-ink">Password123!</code></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,89 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-bar border-rule pb-4">
+    <div>
+      <div class="inline-block px-2.5 py-0.5 mb-1 border-hair border-rule text-xs font-bold uppercase text-accent bg-paper-3">
+        Arsip Transaksi
+      </div>
+      <h1 class="text-xl sm:text-2xl font-extrabold text-ink uppercase tracking-tight">Daftar Seluruh Pesanan</h1>
+      <p class="text-xs text-muted mt-1">Audit seluruh data tiket pemesanan yang tercatat dalam sistem database.</p>
+    </div>
+
+    <!-- Filter Tab Status: Wayfind Square Cells -->
+    <div class="flex flex-wrap border-bar border-rule bg-paper text-xs font-bold uppercase">
+      <a href="/operator/orders" class="px-3 py-1.5 border-r-hair border-rule <%= !statusFilter ? 'bg-ink text-paper' : 'text-ink hover:bg-paper-2' %>">
+        Semua
+      </a>
+      <a href="/operator/orders?status=menunggu_pembayaran" class="px-3 py-1.5 border-r-hair border-rule <%= statusFilter === 'menunggu_pembayaran' ? 'bg-accent-2 text-ink' : 'text-ink hover:bg-paper-2' %>">
+        Menunggu
+      </a>
+      <a href="/operator/orders?status=lunas" class="px-3 py-1.5 border-r-hair border-rule <%= statusFilter === 'lunas' ? 'bg-ink text-paper' : 'text-ink hover:bg-paper-2' %>">
+        Lunas
+      </a>
+      <a href="/operator/orders?status=dibatalkan" class="px-3 py-1.5 border-r-hair border-rule <%= statusFilter === 'dibatalkan' ? 'bg-ink text-paper' : 'text-ink hover:bg-paper-2' %>">
+        Batal
+      </a>
+      <a href="/operator/orders?status=kadaluarsa" class="px-3 py-1.5 <%= statusFilter === 'kadaluarsa' ? 'bg-ink text-paper' : 'text-ink hover:bg-paper-2' %>">
+        Kedaluwarsa
+      </a>
+    </div>
+  </div>
+
+  <% if (orders.length === 0) { %>
+    <div class="text-center py-16 transit-box text-xs font-bold uppercase text-muted">
+      Tidak ada data tiket dengan status ini.
+    </div>
+  <% } else { %>
+    <div class="transit-box overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y-bar divide-rule text-xs">
+          <thead class="bg-paper-3">
+            <tr>
+              <th class="px-6 py-3.5 text-left font-bold text-ink uppercase">Kode Booking</th>
+              <th class="px-6 py-3.5 text-left font-bold text-ink uppercase">Pemesan</th>
+              <th class="px-6 py-3.5 text-left font-bold text-ink uppercase">Rute Perjalanan</th>
+              <th class="px-6 py-3.5 text-left font-bold text-ink uppercase">Status</th>
+              <th class="px-6 py-3.5 text-right font-bold text-ink uppercase">Total Tagihan</th>
+              <th class="px-6 py-3.5 text-right font-bold text-ink uppercase">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y-hair divide-rule bg-paper">
+            <% orders.forEach(o => { 
+                 const isLunas = o.status === 'lunas';
+                 const isWaiting = o.status === 'menunggu_pembayaran';
+            %>
+              <tr class="hover:bg-paper-2">
+                <td class="px-6 py-4 font-mono font-bold text-accent">
+                  <%= o.kode_booking %>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="font-bold text-ink uppercase"><%= o.nama_pemesan %></div>
+                  <div class="text-muted font-mono"><%= o.telepon_pemesan %></div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="font-bold text-ink uppercase"><%= o.kota_asal %> &rarr; <%= o.kota_tujuan %></div>
+                  <div class="text-muted"><%= new Date(o.berangkat_pada).toLocaleString('id-ID') %></div>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="px-2 py-0.5 border-hair border-rule text-xs font-extrabold uppercase
+                    <%= isLunas ? 'text-accent bg-paper-3' : '' %>
+                    <%= isWaiting ? 'bg-accent-2 text-ink' : '' %>
+                    <%= !isLunas && !isWaiting ? 'text-muted bg-paper-3' : '' %>">
+                    <%= o.status.replace('_', ' ') %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right font-extrabold text-ink num">
+                  <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(o.total_harga) %>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <a href="/pesanan/<%= o.kode_booking %>" class="transit-btn transit-btn-ink py-1.5 px-3 text-xs">
+                    Rincian
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% } %>
+</div>

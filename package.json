@@ -1,0 +1,44 @@
+{
+  "name": "travel-booking-monolith",
+  "version": "1.0.0",
+  "description": "Sistem Pemesanan Tiket Travel Monolith",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc && npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --minify",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/server.js",
+    "seed:passwords": "tsx src/scripts/seedPasswords.ts",
+    "seed:demo-schedules": "tsx src/scripts/seedDemoSchedules.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@types/express-ejs-layouts": "^2.5.4",
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "csrf-csrf": "^3.0.8",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/connect-flash": "^0.0.40",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.18.0",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.8.1",
+    "tailwindcss": "^3.4.14",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.3"
+  }
+}

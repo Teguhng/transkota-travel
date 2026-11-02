@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Panel Operasional - TRANSKOTA Travel' %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Chivo+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/output.css">
+  <script src="/js/theme-toggle.js"></script>
+</head>
+<body class="min-h-full flex flex-col md:flex-row bg-paper text-ink font-sans antialiased">
+
+  <!-- Sidebar Navigasi Dashboard: Transit Control Panel -->
+  <aside class="w-full md:w-64 bg-paper-2 border-r-bar border-rule flex-shrink-0 flex flex-col">
+    <div class="p-6 border-b-bar border-rule flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <span class="w-8 h-8 transit-plate flex items-center justify-center font-bold text-base">T</span>
+        <span class="font-bold text-ink tracking-tight text-sm uppercase">Travel Terminal</span>
+      </a>
+      <button type="button" class="theme-toggle-btn p-2 border-bar border-rule text-ink hover:bg-paper-3" aria-label="Ganti Tema">
+        <svg class="sun-icon w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <svg class="moon-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+      </button>
+    </div>
+
+    <div class="px-6 py-4 bg-paper-3 border-b-bar border-rule">
+      <p class="text-xs text-muted">Petugas Bertugas:</p>
+      <p class="text-sm font-bold text-ink truncate"><%= user.nama %></p>
+      <span class="inline-flex items-center px-2 py-0.5 mt-1 border-hair border-rule text-xs font-bold uppercase bg-paper text-ink">
+        <%= user.role === 'admin' ? 'Administrator' : 'Operator Loket' %>
+      </span>
+    </div>
+
+    <nav class="flex-grow p-4 space-y-1">
+      <% if (user.role === 'operator' || user.role === 'admin') { %>
+        <p class="px-3 pt-2 pb-1 text-xs font-bold text-muted uppercase tracking-wider">Loket Operasional</p>
+        <a href="/operator/dashboard" class="flex items-center gap-3 px-3 py-2 text-xs font-bold hover:bg-paper-3 border-bar border-transparent hover:border-rule">
+          <span>[01]</span> Dashboard Loket
+        </a>
+        <a href="/operator/verifikasi" class="flex items-center gap-3 px-3 py-2 text-xs font-bold hover:bg-paper-3 border-bar border-transparent hover:border-rule">
+          <span>[02]</span> Verifikasi Pembayaran
+        </a>
+        <a href="/operator/walkin" class="flex items-center gap-3 px-3 py-2 text-xs font-bold hover:bg-paper-3 border-bar border-transparent hover:border-rule">
+          <span>[03]</span> Kasir Walk-in (Tunai)
+        </a>
+        <a href="/operator/orders" class="flex items-center gap-3 px-3 py-2 text-xs font-bold hover:bg-paper-3 border-bar border-transparent hover:border-rule">
+          <span>[04]</span> Daftar Seluruh Tiket
+        </a>
+      <% } %>
+
+      <% if (user.role === 'admin') { %>
+        <p class="px-3 pt-4 pb-1 text-xs font-bold text-muted uppercase tracking-wider">Manajemen Eksekutif</p>
+        <a href="/admin/dashboard" class="flex items-center gap-3 px-3 py-2 text-xs font-bold hover:bg-paper-3 border-bar border-transparent hover:border-rule">
+          <span>[A1]</span> Statistik Bisnis
+        </a>
+        <a href="/admin/master" class="flex items-center gap-3 px-3 py-2 text-xs font-bold hover:bg-paper-3 border-bar border-transparent hover:border-rule">
+          <span>[A2]</span> Data Master Sistem
+        </a>
+        <a href="/admin/users-keluhan" class="flex items-center gap-3 px-3 py-2 text-xs font-bold hover:bg-paper-3 border-bar border-transparent hover:border-rule">
+          <span>[A3]</span> Pengguna & Keluhan
+        </a>
+      <% } %>
+    </nav>
+
+    <div class="p-4 border-t-bar border-rule">
+      <form action="/logout" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" class="w-full transit-btn transit-btn-ink py-2 text-xs font-bold">
+          Keluar Sesi
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- Konten Utama Dashboard -->
+  <main class="flex-grow p-6 md:p-8 overflow-y-auto">
+    <%- include('../partials/flash') %>
+    <%- body %>
+  </main>
+
+</body>
+</html>

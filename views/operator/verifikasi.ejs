@@ -1,0 +1,66 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-bar border-rule pb-4">
+    <div>
+      <div class="inline-block px-2.5 py-0.5 mb-1 border-hair border-rule text-xs font-bold uppercase text-accent bg-paper-3">
+        Terminal Verifikasi Loket
+      </div>
+      <h1 class="text-xl sm:text-2xl font-extrabold text-ink uppercase tracking-tight">Antrean Pembayaran Transfer</h1>
+      <p class="text-xs text-muted mt-1">Daftar struk transfer yang diunggah calon penumpang untuk divalidasi ke rekening travel.</p>
+    </div>
+    <span class="inline-block px-3 py-1 border-bar border-ink bg-accent-2 text-ink text-xs font-bold uppercase">
+      <%= queue.length %> Menunggu Tindakan
+    </span>
+  </div>
+
+  <% if (queue.length === 0) { %>
+    <div class="text-center py-16 transit-box">
+      <h3 class="text-xs font-bold uppercase text-ink">Tidak Ada Bukti Transfer Baru</h3>
+      <p class="mt-1 text-xs text-muted">Seluruh transaksi telah diverifikasi atau belum ada unggahan baru.</p>
+    </div>
+  <% } else { %>
+    <div class="transit-box overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y-bar divide-rule text-xs">
+          <thead class="bg-paper-3">
+            <tr>
+              <th class="px-6 py-3.5 text-left font-bold text-ink uppercase">Kode Booking</th>
+              <th class="px-6 py-3.5 text-left font-bold text-ink uppercase">Pemesan & Rute</th>
+              <th class="px-6 py-3.5 text-left font-bold text-ink uppercase">Info Transfer</th>
+              <th class="px-6 py-3.5 text-left font-bold text-ink uppercase">Waktu Unggah</th>
+              <th class="px-6 py-3.5 text-right font-bold text-ink uppercase">Nominal</th>
+              <th class="px-6 py-3.5 text-right font-bold text-ink uppercase">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y-hair divide-rule bg-paper">
+            <% queue.forEach(item => { %>
+              <tr class="hover:bg-paper-2">
+                <td class="px-6 py-4 font-mono font-bold text-accent">
+                  <%= item.kode_booking %>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="font-bold text-ink uppercase"><%= item.nama_pemesan %></div>
+                  <div class="text-muted"><%= item.kota_asal %> &rarr; <%= item.kota_tujuan %></div>
+                </td>
+                <td class="px-6 py-4 text-xs">
+                  <div class="font-mono text-ink">Ref: <%= item.referensi %></div>
+                  <div class="text-muted">Rek: <%= item.no_rek_pengirim %></div>
+                </td>
+                <td class="px-6 py-4 text-muted">
+                  <%= new Date(item.waktu_bayar || item.created_at).toLocaleString('id-ID') %>
+                </td>
+                <td class="px-6 py-4 text-right font-extrabold text-ink num">
+                  <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(item.total_harga) %>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <a href="/operator/verifikasi/<%= item.id %>" class="transit-btn transit-btn-cobalt py-1.5 px-3 text-xs">
+                    Periksa Berkas
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% } %>
+</div>

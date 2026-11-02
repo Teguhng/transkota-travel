@@ -1,0 +1,420 @@
+<!-- TRANSKOTA Executive Transit Landing Page (Anti-Slop Design System) -->
+<div class="space-y-10 sm:space-y-14">
+
+  <!-- Hero & Route Search Section -->
+  <div class="space-y-6">
+    <!-- Hero Banner: Harmonious Transit Container -->
+    <div class="rounded-2xl sm:rounded-3xl bg-paper-2 dark:bg-slate-900/60 text-ink p-6 sm:p-10 lg:p-12 border border-rule shadow-sm relative overflow-hidden transition-colors">
+      <div class="max-w-3xl">
+        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-ink leading-tight">
+          Perjalanan Minibus Terjadwal Antarkota
+        </h1>
+        <p class="mt-3 sm:mt-4 text-xs sm:text-base text-muted leading-relaxed max-w-2xl font-normal">
+          Layanan transportasi minibus reguler rute Lampung, Palembang, dan Jakarta. Maksimal 5 kursi per armada dengan kepastian waktu berangkat setiap hari.
+        </p>
+
+        <!-- Operational Highlights -->
+        <div class="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-semibold text-ink">
+          <div class="flex items-center gap-2.5 bg-paper-3 px-3.5 py-2.5 rounded-xl border border-rule">
+            <svg class="w-4 h-4 text-accent flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            <span>Kabin 5 Kursi Eksklusif</span>
+          </div>
+          <div class="flex items-center gap-2.5 bg-paper-3 px-3.5 py-2.5 rounded-xl border border-rule">
+            <svg class="w-4 h-4 text-accent flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Berangkat Tepat Waktu</span>
+          </div>
+          <div class="flex items-center gap-2.5 bg-paper-3 px-3.5 py-2.5 rounded-xl border border-rule">
+            <svg class="w-4 h-4 text-accent flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span>Kunci Kursi Anti-Double Booking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Route Search Engine Card -->
+    <div class="bg-paper-3 rounded-2xl sm:rounded-3xl border border-rule p-4 sm:p-6 lg:p-8 shadow-sm">
+      <div class="flex items-center justify-between pb-3 sm:pb-4 mb-4 sm:mb-6 border-b border-rule">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-accent" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <span class="text-xs font-bold uppercase tracking-wider text-ink">Cari Jadwal Minibus Reguler</span>
+        </div>
+        <span class="text-[11px] text-muted font-medium hidden sm:inline-block">Pesan kursi secara instan</span>
+      </div>
+
+      <!-- Main Search Form -->
+      <form action="/jadwal" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 sm:gap-4 items-end">
+        
+        <!-- Stasiun Asal -->
+        <div class="lg:col-span-3">
+          <label for="asal" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink mb-1.5 sm:mb-2">
+            <svg class="w-3.5 h-3.5 text-accent" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            </svg>
+            Stasiun Asal
+          </label>
+          <select name="asal" id="asal" class="w-full h-11 sm:h-12 px-3 sm:px-3.5 py-2 text-xs font-semibold rounded-xl border border-rule bg-paper text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors">
+            <option value="">Semua Kota Asal</option>
+            <% cities.forEach(c => { %>
+              <option value="<%= c.id %>"><%= c.nama %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- Swap Route Button (Desktop & Mobile) -->
+        <div class="flex lg:col-span-1 justify-center -my-1 sm:my-0 lg:pb-2">
+          <button type="button" class="btn-swap-route p-2 sm:p-2.5 rounded-full border border-rule bg-paper text-ink hover:text-accent hover:border-accent transition-colors shadow-sm" aria-label="Tukar kota asal dan tujuan">
+            <svg class="w-4 h-4 transform rotate-90 lg:rotate-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Stasiun Tujuan -->
+        <div class="lg:col-span-3">
+          <label for="tujuan" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink mb-1.5 sm:mb-2">
+            <svg class="w-3.5 h-3.5 text-accent" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            </svg>
+            Stasiun Tujuan
+          </label>
+          <select name="tujuan" id="tujuan" class="w-full h-11 sm:h-12 px-3 sm:px-3.5 py-2 text-xs font-semibold rounded-xl border border-rule bg-paper text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors">
+            <option value="">Semua Kota Tujuan</option>
+            <% cities.forEach(c => { %>
+              <option value="<%= c.id %>"><%= c.nama %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <!-- Tanggal Keberangkatan -->
+        <div class="lg:col-span-3">
+          <div class="flex items-center justify-between mb-1.5 sm:mb-2">
+            <label for="tanggal" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink">
+              <svg class="w-3.5 h-3.5 text-accent" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Tanggal Perjalanan
+            </label>
+            <div class="flex items-center gap-2 text-[11px]">
+              <button type="button" id="btn-quick-today" class="text-accent hover:underline font-bold">Hari Ini</button>
+              <span class="text-muted" aria-hidden="true">&bull;</span>
+              <button type="button" id="btn-quick-tomorrow" class="text-accent hover:underline font-bold">Besok</button>
+            </div>
+          </div>
+          <input type="date" name="tanggal" id="tanggal"
+                 class="w-full h-11 sm:h-12 px-3 sm:px-3.5 py-2 text-xs font-semibold rounded-xl border border-rule bg-paper text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors" />
+        </div>
+
+        <!-- Tombol Cari Tiket -->
+        <div class="sm:col-span-2 lg:col-span-2">
+          <button type="submit" class="w-full h-11 sm:h-12 px-4 rounded-xl font-bold text-xs uppercase tracking-wider bg-accent text-paper hover:bg-accent/90 shadow-sm flex items-center justify-center gap-2 transition-colors">
+            <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span>Cari Jadwal</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Keberangkatan Terdekat (Departure Timetable) -->
+  <section class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between pb-3 sm:pb-4 border-b border-rule gap-3">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-accent">Jadwal Keberangkatan Terdekat</span>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-ink tracking-tight mt-1">Armada Siap Berangkat</h2>
+        <p class="text-xs text-muted mt-0.5">Pilih jadwal aktif dan amankan kursi kabin secara instan.</p>
+      </div>
+      <a href="/jadwal" class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-accent hover:underline">
+        <span>Lihat Semua Jadwal</span>
+        <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <% if (!schedules || schedules.length === 0) { %>
+      <div class="text-center py-12 sm:py-16 p-6 sm:p-8 rounded-2xl border border-dashed border-rule bg-paper-2">
+        <div class="w-12 h-12 rounded-full bg-paper border border-rule flex items-center justify-center mx-auto mb-3 text-muted">
+          <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <p class="text-sm font-bold text-ink">Belum Ada Jadwal Armada Hari Ini</p>
+        <p class="text-xs text-muted mt-1">Silakan periksa tanggal perjalanan lain atau sesuaikan stasiun keberangkatan.</p>
+      </div>
+    <% } else { %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <% schedules.forEach(s => { %>
+          <div class="rounded-2xl border border-rule bg-paper-3 p-4 sm:p-6 flex flex-col justify-between hover:border-accent hover:shadow-md transition-colors">
+            
+            <div>
+              <!-- Header Kartu: Armada & Sisa Kursi -->
+              <div class="flex items-center justify-between pb-3 mb-3 sm:mb-4 border-b border-rule">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-accent/10 text-accent flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-xs font-extrabold text-ink leading-tight"><%= s.nama_kendaraan %></h3>
+                    <p class="text-[10px] text-muted font-mono"><%= s.nomor_polisi %></p>
+                  </div>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                  <%= s.kursi_tersedia %> Kursi Kosong
+                </span>
+              </div>
+
+              <!-- Route Display -->
+              <div class="py-1 sm:py-2">
+                <div class="flex items-center justify-between gap-2 sm:gap-3 mb-1">
+                  <div class="flex-1 min-w-0">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-muted">Keberangkatan</p>
+                    <p class="text-sm sm:text-base font-extrabold text-ink leading-tight truncate"><%= s.kota_asal %></p>
+                  </div>
+
+                  <div class="flex flex-col items-center px-1 sm:px-2 flex-shrink-0">
+                    <span class="text-[9px] font-bold text-muted uppercase">Minibus</span>
+                    <div class="flex items-center gap-1 text-accent">
+                      <span class="w-2 sm:w-3 h-0.5 bg-accent/40 rounded"></span>
+                      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                      <span class="w-2 sm:w-3 h-0.5 bg-accent/40 rounded"></span>
+                    </div>
+                  </div>
+
+                  <div class="flex-1 min-w-0 text-right">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-muted">Tujuan</p>
+                    <p class="text-sm sm:text-base font-extrabold text-ink leading-tight truncate"><%= s.kota_tujuan %></p>
+                  </div>
+                </div>
+
+                <!-- Departure Time Badge -->
+                <div class="mt-3 sm:mt-4 p-2 sm:p-2.5 rounded-xl bg-paper-2 border border-rule flex items-center justify-between text-xs">
+                  <span class="text-muted font-medium text-[11px] sm:text-xs">Waktu Keberangkatan:</span>
+                  <span class="font-bold text-ink text-[11px] sm:text-xs font-mono">
+                    <%= new Date(s.berangkat_pada).toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %> WIB
+                  </span>
+                </div>
+
+                <!-- Amenities -->
+                <div class="mt-2.5 sm:mt-3 flex flex-wrap gap-1.5 text-[10px] font-semibold text-muted">
+                  <span class="px-2 py-0.5 rounded bg-paper border border-rule">Full AC</span>
+                  <span class="px-2 py-0.5 rounded bg-paper border border-rule">Reclining Seat</span>
+                  <span class="px-2 py-0.5 rounded bg-paper border border-rule">USB Charger</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Price & Action Button -->
+            <div class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-rule flex items-center justify-between gap-2">
+              <div>
+                <p class="text-[10px] text-muted uppercase font-bold">Tarif Resmi</p>
+                <p class="text-base sm:text-lg font-extrabold text-ink leading-tight font-mono">
+                  <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(s.harga)) %>
+                </p>
+              </div>
+              <a href="/booking/<%= s.id %>/kursi" class="transit-btn transit-btn-cobalt text-xs py-2 sm:py-2.5 px-3.5 sm:px-4 rounded-xl shadow-sm flex items-center gap-1.5 flex-shrink-0">
+                <span>Pilih Kursi</span>
+                <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </section>
+
+  <!-- Service Standards (Operational Reality) -->
+  <section class="space-y-6">
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="text-xs font-bold uppercase tracking-wider text-accent">Standar Operasional Armada</span>
+      <h2 class="text-xl sm:text-2xl font-extrabold text-ink tracking-tight mt-1">Mengapa Memilih TRANSKOTA</h2>
+      <p class="text-xs sm:text-sm text-muted mt-1.5">Kenyamanan perjalanan antarkota dengan kepastian jadwal dan keamanan reservasi.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      
+      <!-- Feature 1 -->
+      <div class="p-5 sm:p-6 rounded-2xl bg-paper-3 border border-rule hover:border-accent transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-3 sm:mb-4">
+          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+        <h3 class="text-sm font-extrabold text-ink mb-1.5">Kabin 5 Kursi Eksklusif</h3>
+        <p class="text-xs text-muted leading-relaxed">
+          Kapasitas kabin dibatasi maksimal 5 penumpang agar setiap penumpang memiliki ruang gerak leluasa dan sirkulasi AC yang optimal.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="p-5 sm:p-6 rounded-2xl bg-paper-3 border border-rule hover:border-accent transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3 sm:mb-4">
+          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="text-sm font-extrabold text-ink mb-1.5">Jadwal Pasti Berangkat</h3>
+        <p class="text-xs text-muted leading-relaxed">
+          Armada berangkat sesuai jam yang tertera pada tiket perjalanan tanpa mengetem mencari penumpang di jalan raya.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="p-5 sm:p-6 rounded-2xl bg-paper-3 border border-rule hover:border-accent transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-accent-2/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3 sm:mb-4">
+          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <h3 class="text-sm font-extrabold text-ink mb-1.5">Kunci Kursi Terverifikasi</h3>
+        <p class="text-xs text-muted leading-relaxed">
+          Sistem transaksi atomik mengunci nomor kursi yang Anda pilih secara instan, menghindarkan potensi double-booking.
+        </p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="p-5 sm:p-6 rounded-2xl bg-paper-3 border border-rule hover:border-accent transition-colors">
+        <div class="w-10 h-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-3 sm:mb-4">
+          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+        <h3 class="text-sm font-extrabold text-ink mb-1.5">Pengemudi Berpengalaman</h3>
+        <p class="text-xs text-muted leading-relaxed">
+          Pengemudi resmi dengan sertifikasi rute jalan tol Trans-Sumatera dan Jawa yang mengutamakan keselamatan dan keramahan.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Popular Routes Section -->
+  <section class="space-y-6">
+    <div class="rounded-2xl sm:rounded-3xl bg-paper-2 border border-rule p-5 sm:p-8 lg:p-10">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between pb-4 sm:pb-6 border-b border-rule gap-3">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-accent">Rute Favorit Harian</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-ink tracking-tight mt-1">Destinasi Antarkota Utama</h2>
+          <p class="text-xs text-muted mt-0.5">Pilihan rute minibus harian dengan estimasi durasi dan tarif resmi.</p>
+        </div>
+        <a href="/jadwal" class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-accent hover:underline">
+          <span>Katalog Rute Lengkap</span>
+          <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-6">
+        <!-- Rute 1 -->
+        <a href="/jadwal" class="p-4 sm:p-5 rounded-2xl bg-paper-3 border border-rule hover:border-accent hover:shadow-sm transition-all group">
+          <div class="flex items-center justify-between text-xs font-bold text-muted mb-2">
+            <span>Tol Trans-Sumatera</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-mono">4-5 Jam</span>
+          </div>
+          <p class="text-sm font-extrabold text-ink group-hover:text-accent transition-colors">Bandar Lampung - Palembang</p>
+          <p class="text-xs text-muted mt-1">Mulai <strong class="text-accent text-sm font-mono">Rp 150.000</strong></p>
+        </a>
+
+        <!-- Rute 2 -->
+        <a href="/jadwal" class="p-4 sm:p-5 rounded-2xl bg-paper-3 border border-rule hover:border-accent hover:shadow-sm transition-all group">
+          <div class="flex items-center justify-between text-xs font-bold text-muted mb-2">
+            <span>Via Kapal Eksekutif</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-mono">5-6 Jam</span>
+          </div>
+          <p class="text-sm font-extrabold text-ink group-hover:text-accent transition-colors">Bandar Lampung - Jakarta</p>
+          <p class="text-xs text-muted mt-1">Mulai <strong class="text-accent text-sm font-mono">Rp 260.000</strong></p>
+        </a>
+
+        <!-- Rute 3 -->
+        <a href="/jadwal" class="p-4 sm:p-5 rounded-2xl bg-paper-3 border border-rule hover:border-accent hover:shadow-sm transition-all group">
+          <div class="flex items-center justify-between text-xs font-bold text-muted mb-2">
+            <span>Antarkota Reguler</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-mono">1 Jam</span>
+          </div>
+          <p class="text-sm font-extrabold text-ink group-hover:text-accent transition-colors">Bandar Lampung - Metro</p>
+          <p class="text-xs text-muted mt-1">Mulai <strong class="text-accent text-sm font-mono">Rp 45.000</strong></p>
+        </a>
+
+        <!-- Rute 4 -->
+        <a href="/jadwal" class="p-4 sm:p-5 rounded-2xl bg-paper-3 border border-rule hover:border-accent hover:shadow-sm transition-all group">
+          <div class="flex items-center justify-between text-xs font-bold text-muted mb-2">
+            <span>Lintas Barat</span>
+            <span class="text-emerald-600 dark:text-emerald-400 font-mono">2-3 Jam</span>
+          </div>
+          <p class="text-sm font-extrabold text-ink group-hover:text-accent transition-colors">Bandar Lampung - Tanggamus</p>
+          <p class="text-xs text-muted mt-1">Mulai <strong class="text-accent text-sm font-mono">Rp 65.000</strong></p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Client JavaScript for Home Interactivity -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Tombol Swap Rute (Desktop & Mobile)
+    const swapBtns = document.querySelectorAll('.btn-swap-route');
+    const asalSelect = document.getElementById('asal');
+    const tujuanSelect = document.getElementById('tujuan');
+
+    if (asalSelect && tujuanSelect) {
+      swapBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const temp = asalSelect.value;
+          asalSelect.value = tujuanSelect.value;
+          tujuanSelect.value = temp;
+        });
+      });
+    }
+
+    // Tombol Shortcut Tanggal: Hari Ini & Besok
+    const dateInput = document.getElementById('tanggal');
+    const todayBtn = document.getElementById('btn-quick-today');
+    const tomorrowBtn = document.getElementById('btn-quick-tomorrow');
+
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    if (dateInput) {
+      const now = new Date();
+      dateInput.min = formatDate(now);
+
+      if (todayBtn) {
+        todayBtn.addEventListener('click', () => {
+          dateInput.value = formatDate(new Date());
+        });
+      }
+
+      if (tomorrowBtn) {
+        tomorrowBtn.addEventListener('click', () => {
+          const tmrw = new Date();
+          tmrw.setDate(tmrw.getDate() + 1);
+          dateInput.value = formatDate(tmrw);
+        });
+      }
+    }
+  });
+</script>

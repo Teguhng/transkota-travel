@@ -1,0 +1,187 @@
+<div class="space-y-8">
+  <!-- Header & Pencarian Jadwal: Modern Travel Filter -->
+  <div class="rounded-2xl sm:rounded-3xl border border-rule bg-paper-3 p-5 sm:p-8 shadow-sm">
+    <div class="max-w-2xl mb-6">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-accent/10 text-accent mb-3">
+        <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Jadwal Perjalanan Resmi</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">Katalog Jadwal Minibus</h1>
+      <p class="mt-1.5 text-xs sm:text-sm text-muted">Kabin eksekutif 5 kursi berpendingin udara. Waktu keberangkatan teratur dan pasti berangkat tepat waktu.</p>
+    </div>
+
+    <form action="/jadwal" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+      <!-- Stasiun Asal -->
+      <div class="lg:col-span-3">
+        <label for="asal" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink mb-2">
+          <svg class="w-4 h-4 text-accent" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          </svg>
+          Stasiun Asal
+        </label>
+        <select id="asal" name="asal" class="w-full h-12 rounded-xl border border-rule bg-paper px-3.5 py-2 text-xs font-semibold text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors">
+          <option value="">Semua Kota Asal</option>
+          <% cities.forEach(c => { %>
+            <option value="<%= c.id %>" <%= filter.asal == c.id ? 'selected' : '' %>><%= c.nama %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <!-- Stasiun Tujuan -->
+      <div class="lg:col-span-3">
+        <label for="tujuan" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink mb-2">
+          <svg class="w-4 h-4 text-accent" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          </svg>
+          Stasiun Tujuan
+        </label>
+        <select id="tujuan" name="tujuan" class="w-full h-12 rounded-xl border border-rule bg-paper px-3.5 py-2 text-xs font-semibold text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors">
+          <option value="">Semua Kota Tujuan</option>
+          <% cities.forEach(c => { %>
+            <option value="<%= c.id %>" <%= filter.tujuan == c.id ? 'selected' : '' %>><%= c.nama %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <!-- Tanggal Perjalanan -->
+      <div class="lg:col-span-3">
+        <label for="tanggal" class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-ink mb-2">
+          <svg class="w-4 h-4 text-accent" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Tanggal Perjalanan
+        </label>
+        <input type="date" id="tanggal" name="tanggal" value="<%= filter.tanggal || '' %>" class="w-full h-12 rounded-xl border border-rule bg-paper px-3.5 py-2 text-xs font-semibold text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors">
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="lg:col-span-3 flex gap-2">
+        <button type="submit" class="flex-1 h-12 rounded-xl font-bold text-xs uppercase tracking-wider bg-accent text-paper hover:bg-accent/90 shadow-sm flex items-center justify-center gap-2 transition-colors">
+          <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <span>Cari Jadwal</span>
+        </button>
+        <% if (filter.asal || filter.tujuan || filter.tanggal) { %>
+          <a href="/jadwal" class="h-12 px-4 rounded-xl border border-rule bg-paper hover:bg-paper-2 text-ink text-xs font-bold flex items-center justify-center transition-colors" title="Reset Filter">
+            Reset
+          </a>
+        <% } %>
+      </div>
+    </form>
+  </div>
+
+  <!-- Hasil Daftar Jadwal: Departure Timetable Rows -->
+  <div class="space-y-4">
+    <div class="flex items-center justify-between pb-3 border-b border-rule">
+      <div>
+        <h2 class="text-lg font-extrabold text-ink tracking-tight">Daftar Keberangkatan (<%= schedules.length %>)</h2>
+        <p class="text-xs text-muted">Jadwal resmi terverifikasi sistem</p>
+      </div>
+      <span class="text-xs text-muted font-semibold">Waktu Indonesia Barat (WIB)</span>
+    </div>
+
+    <% if (schedules.length === 0) { %>
+      <div class="text-center py-16 p-8 rounded-3xl border border-dashed border-rule bg-paper-2">
+        <div class="w-12 h-12 rounded-full bg-paper border border-rule flex items-center justify-center mx-auto mb-3 text-muted">
+          <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <p class="text-sm font-bold text-ink">Tidak Ada Armada Pada Kriteria Pencarian Ini</p>
+        <p class="mt-1 text-xs text-muted">Silakan pilih tanggal perjalanan lain atau sesuaikan stasiun keberangkatan.</p>
+        <a href="/jadwal" class="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:underline">
+          <span>Tampilkan Seluruh Jadwal</span>
+          <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+    <% } else { %>
+      <div class="grid grid-cols-1 gap-4">
+        <% schedules.forEach(s => { 
+             const dateObj = new Date(s.berangkat_pada);
+             const dateStr = dateObj.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+             const timeStr = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+             const priceStr = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(s.harga);
+             const isAvailable = s.kursi_tersedia > 0;
+        %>
+          <div class="rounded-2xl border border-rule bg-paper-3 p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-accent hover:shadow-md transition-colors">
+            
+            <div class="flex-grow space-y-3">
+              <!-- Armada & Status Badges -->
+              <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-paper-2 border border-rule text-ink">
+                  <svg class="w-4 h-4 text-accent flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                  </svg>
+                  <span><%= s.nama_kendaraan || 'Minibus Eksekutif' %></span>
+                  <span class="font-mono text-muted text-[11px]">(<%= s.nomor_polisi %>)</span>
+                </span>
+                <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold <%= isAvailable ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20' %>">
+                  <%= isAvailable ? `${s.kursi_tersedia} Kursi Tersedia` : 'Habis Terjual' %>
+                </span>
+              </div>
+
+              <!-- Route Visual Graphic -->
+              <div class="flex items-center gap-4 sm:gap-6 pt-1">
+                <div>
+                  <div class="text-lg font-extrabold text-ink"><%= s.kota_asal %></div>
+                  <div class="text-xs text-muted font-bold font-mono"><%= timeStr %> WIB</div>
+                </div>
+
+                <div class="flex flex-col items-center px-2">
+                  <span class="text-[9px] font-bold text-muted uppercase">Minibus</span>
+                  <div class="flex items-center gap-1 text-accent">
+                    <span class="w-3 h-0.5 bg-accent/40 rounded"></span>
+                    <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                    <span class="w-3 h-0.5 bg-accent/40 rounded"></span>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="text-lg font-extrabold text-ink"><%= s.kota_tujuan %></div>
+                  <div class="text-xs text-muted font-semibold"><%= dateStr %></div>
+                </div>
+              </div>
+
+              <!-- Mini Amenities -->
+              <div class="flex items-center gap-2 text-[10px] text-muted font-semibold">
+                <span class="px-2 py-0.5 rounded bg-paper border border-rule">Kabin 5 Seat</span>
+                <span class="px-2 py-0.5 rounded bg-paper border border-rule">Full AC</span>
+                <span class="px-2 py-0.5 rounded bg-paper border border-rule">Reclining Seat</span>
+                <span class="px-2 py-0.5 rounded bg-paper border border-rule">Bagasi</span>
+              </div>
+            </div>
+
+            <!-- Price & Action CTA -->
+            <div class="flex items-center justify-between md:flex-col md:items-end gap-3 pt-4 md:pt-0 border-t md:border-t-0 border-rule">
+              <div class="text-left md:text-right">
+                <span class="text-[10px] text-muted uppercase font-bold block">Tarif Resmi / Orang</span>
+                <span class="text-xl font-extrabold text-ink font-mono"><%= priceStr %></span>
+              </div>
+              
+              <% if (isAvailable) { %>
+                <a href="/booking/<%= s.id %>/kursi" class="transit-btn transit-btn-cobalt text-xs py-2.5 px-5 rounded-xl shadow-sm flex items-center gap-1.5 font-bold">
+                  <span>Pilih Kursi</span>
+                  <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              <% } else { %>
+                <button disabled class="h-10 px-5 rounded-xl border border-rule bg-paper-2 text-muted text-xs font-bold opacity-50 cursor-not-allowed">
+                  Habis Terjual
+                </button>
+              <% } %>
+            </div>
+
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>

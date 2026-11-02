@@ -1,0 +1,34 @@
+<% if (typeof flash !== 'undefined') { %>
+  <% if (flash.error && flash.error.length > 0) { %>
+    <div class="mb-6 p-4 border-bar border-[var(--color-error)] bg-paper-2 text-ink flex items-start gap-3" role="alert">
+      <span class="px-2 py-0.5 bg-[var(--color-error)] text-white text-xs font-bold uppercase flex-shrink-0">Peringatan</span>
+      <div class="text-xs font-bold">
+        <% flash.error.forEach(function(msg) { %>
+          <p><%= msg %></p>
+        <% }); %>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (flash.success && flash.success.length > 0) { %>
+    <div class="mb-6 p-4 border-bar border-[var(--color-success)] bg-paper-2 text-ink flex items-start gap-3" role="alert">
+      <span class="px-2 py-0.5 bg-[var(--color-success)] text-white text-xs font-bold uppercase flex-shrink-0">Berhasil</span>
+      <div class="text-xs font-bold">
+        <% flash.success.forEach(function(msg) { %>
+          <p><%= msg %></p>
+        <% }); %>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (flash.info && flash.info.length > 0) { %>
+    <div class="mb-6 p-4 border-bar border-accent bg-paper-2 text-ink flex items-start gap-3" role="alert">
+      <span class="px-2 py-0.5 bg-accent text-[var(--color-accent-ink)] text-xs font-bold uppercase flex-shrink-0">Informasi</span>
+      <div class="text-xs font-bold">
+        <% flash.info.forEach(function(msg) { %>
+          <p><%= msg %></p>
+        <% }); %>
+      </div>
+    </div>
+  <% } %>
+<% } %>

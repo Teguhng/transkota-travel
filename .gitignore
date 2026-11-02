@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Compiled styles
+public/css/output.css
+
+# User uploads and runtime storage (preserve .gitkeep)
+storage/uploads/*
+!storage/uploads/.gitkeep
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test, coverage, and headless browser artifacts
+coverage/
+.nyc_output/
+shots/
+test_shot.png
+.chrome_profile/
+tmp-chrome/
+
+# Editor and OS temporary files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+~$*.docx
+~$*.xlsx

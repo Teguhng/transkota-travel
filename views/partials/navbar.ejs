@@ -1,0 +1,71 @@
+<header class="border-b border-rule bg-paper-3/95 backdrop-blur-md sticky top-0 z-40 shadow-sm w-full">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 sm:h-18">
+      
+      <!-- Brand Logo: Modern Travel Identity -->
+      <a href="/" class="flex items-center gap-2 group min-w-0 flex-shrink-0">
+        <div class="w-8 h-8 rounded-lg bg-accent text-paper flex items-center justify-center font-extrabold text-base flex-shrink-0 shadow-sm shadow-accent/20 transition-transform group-hover:scale-105">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1">
+            <span class="font-extrabold text-ink text-base sm:text-lg tracking-tight">TRANSKOTA</span>
+            <span class="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-accent/10 text-accent">TRAVEL</span>
+          </div>
+          <p class="text-[11px] text-muted font-medium hidden md:block">Layanan Minibus Antarkota Eksekutif</p>
+        </div>
+      </a>
+
+      <!-- Navigation Links (Desktop) -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a href="/" class="text-xs font-bold uppercase tracking-wider text-ink hover:text-accent transition-colors">Beranda</a>
+        <a href="/jadwal" class="text-xs font-bold uppercase tracking-wider text-ink hover:text-accent transition-colors">Jadwal Keberangkatan</a>
+        <% if (user && user.role === 'member') { %>
+          <a href="/member/pesanan" class="text-xs font-bold uppercase tracking-wider text-ink hover:text-accent transition-colors">Tiket Saya</a>
+          <a href="/member/keluhan" class="text-xs font-bold uppercase tracking-wider text-ink hover:text-accent transition-colors">Pusat Bantuan</a>
+        <% } %>
+        <% if (user && (user.role === 'operator' || user.role === 'admin')) { %>
+          <a href="/operator/dashboard" class="text-xs font-bold uppercase tracking-wider text-accent border-b-2 border-accent pb-0.5">Terminal Petugas</a>
+        <% } %>
+      </nav>
+
+      <!-- Right Controls: Theme Toggle & Auth Buttons -->
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <!-- Theme Toggle Button -->
+        <button type="button" class="theme-toggle-btn p-1.5 rounded-lg border border-rule text-ink hover:bg-paper-2 transition-colors" aria-label="Ganti Tema Tampilan">
+          <svg class="sun-icon w-4 h-4 hidden text-accent-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <svg class="moon-icon w-4 h-4 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+
+        <% if (user) { %>
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <div class="hidden sm:block text-right">
+              <p class="text-xs font-bold text-ink leading-tight"><%= user.nama %></p>
+              <p class="text-[10px] text-muted capitalize"><%= user.role %></p>
+            </div>
+            <form action="/logout" method="POST" class="inline">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button type="submit" class="transit-btn transit-btn-ink text-xs py-1.5 px-2.5 sm:px-3 rounded-lg font-bold">
+                Keluar
+              </button>
+            </form>
+          </div>
+        <% } else { %>
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <a href="/login" class="transit-btn transit-btn-ink text-xs py-1.5 px-2.5 sm:px-3 rounded-lg font-bold">
+              Masuk
+            </a>
+            <span class="hidden sm:inline-flex">
+              <a href="/register" class="transit-btn transit-btn-cobalt text-xs py-1.5 px-3.5 rounded-lg font-bold shadow-sm shadow-accent/20">
+                Daftar
+              </a>
+            </span>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</header>

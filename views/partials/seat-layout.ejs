@@ -1,0 +1,142 @@
+<div class="relative max-w-sm mx-auto p-6 border-bar border-rule bg-paper-2">
+  <div class="text-center pb-3 border-b-bar border-rule mb-6">
+    <span class="text-xs uppercase tracking-wider text-ink font-bold">Denah Kabin Minibus (5 Penumpang)</span>
+  </div>
+
+  <div id="minibus-cabin" class="space-y-6" data-price="<%= schedule.harga %>">
+    
+    <!-- Baris Depan: Kursi 1 (Penumpang Depan) & Kursi Supir -->
+    <div class="flex items-center justify-between px-4">
+      <!-- Kursi 1 -->
+      <% const seat1 = seats.find(s => s.nomor === '1'); %>
+      <div class="text-center">
+        <% if (seat1) { %>
+          <button type="button"
+                  class="seat-btn seat-tile
+                         <%= seat1.status === 'tersedia' ? 'bg-paper-3 border-bar border-rule text-ink hover:border-accent cursor-pointer' : '' %>
+                         <%= seat1.status === 'ditahan' ? 'bg-accent-2 border-bar border-ink text-ink cursor-not-allowed' : '' %>
+                         <%= seat1.status === 'terjual' ? 'bg-paper-2 border-bar border-rule text-muted cursor-not-allowed opacity-40' : '' %>"
+                  data-seat-id="<%= seat1.id %>"
+                  data-seat-no="1"
+                  data-status="<%= seat1.status %>"
+                  <%= seat1.status !== 'tersedia' ? 'disabled' : '' %>
+                  aria-label="Kursi 1, Status: <%= seat1.status %>">
+            <span class="text-base font-extrabold leading-none">1</span>
+            <span class="text-[9px] uppercase font-bold leading-none mt-1"><%= seat1.status %></span>
+          </button>
+        <% } %>
+      </div>
+
+      <!-- Kursi Pengemudi (Non-interaktif) -->
+      <div class="seat-tile border-bar border-rule bg-paper-2 text-muted cursor-not-allowed" aria-label="Kursi Pengemudi">
+        <svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span class="text-[9px] font-bold uppercase">Supir</span>
+      </div>
+    </div>
+
+    <!-- Baris Tengah: Kursi 2 & Kursi 3 -->
+    <div class="flex items-center justify-between px-4">
+      <% const seat2 = seats.find(s => s.nomor === '2'); %>
+      <% const seat3 = seats.find(s => s.nomor === '3'); %>
+
+      <!-- Kursi 2 -->
+      <div class="text-center">
+        <% if (seat2) { %>
+          <button type="button"
+                  class="seat-btn seat-tile
+                         <%= seat2.status === 'tersedia' ? 'bg-paper-3 border-bar border-rule text-ink hover:border-accent cursor-pointer' : '' %>
+                         <%= seat2.status === 'ditahan' ? 'bg-accent-2 border-bar border-ink text-ink cursor-not-allowed' : '' %>
+                         <%= seat2.status === 'terjual' ? 'bg-paper-2 border-bar border-rule text-muted cursor-not-allowed opacity-40' : '' %>"
+                  data-seat-id="<%= seat2.id %>"
+                  data-seat-no="2"
+                  data-status="<%= seat2.status %>"
+                  <%= seat2.status !== 'tersedia' ? 'disabled' : '' %>
+                  aria-label="Kursi 2, Status: <%= seat2.status %>">
+            <span class="text-base font-extrabold leading-none">2</span>
+            <span class="text-[9px] uppercase font-bold leading-none mt-1"><%= seat2.status %></span>
+          </button>
+        <% } %>
+      </div>
+
+      <!-- Kursi 3 -->
+      <div class="text-center">
+        <% if (seat3) { %>
+          <button type="button"
+                  class="seat-btn seat-tile
+                         <%= seat3.status === 'tersedia' ? 'bg-paper-3 border-bar border-rule text-ink hover:border-accent cursor-pointer' : '' %>
+                         <%= seat3.status === 'ditahan' ? 'bg-accent-2 border-bar border-ink text-ink cursor-not-allowed' : '' %>
+                         <%= seat3.status === 'terjual' ? 'bg-paper-2 border-bar border-rule text-muted cursor-not-allowed opacity-40' : '' %>"
+                  data-seat-id="<%= seat3.id %>"
+                  data-seat-no="3"
+                  data-status="<%= seat3.status %>"
+                  <%= seat3.status !== 'tersedia' ? 'disabled' : '' %>
+                  aria-label="Kursi 3, Status: <%= seat3.status %>">
+            <span class="text-base font-extrabold leading-none">3</span>
+            <span class="text-[9px] uppercase font-bold leading-none mt-1"><%= seat3.status %></span>
+          </button>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Baris Belakang: Kursi 4 & Kursi 5 -->
+    <div class="flex items-center justify-between px-4">
+      <% const seat4 = seats.find(s => s.nomor === '4'); %>
+      <% const seat5 = seats.find(s => s.nomor === '5'); %>
+
+      <!-- Kursi 4 -->
+      <div class="text-center">
+        <% if (seat4) { %>
+          <button type="button"
+                  class="seat-btn seat-tile
+                         <%= seat4.status === 'tersedia' ? 'bg-paper-3 border-bar border-rule text-ink hover:border-accent cursor-pointer' : '' %>
+                         <%= seat4.status === 'ditahan' ? 'bg-accent-2 border-bar border-ink text-ink cursor-not-allowed' : '' %>
+                         <%= seat4.status === 'terjual' ? 'bg-paper-2 border-bar border-rule text-muted cursor-not-allowed opacity-40' : '' %>"
+                  data-seat-id="<%= seat4.id %>"
+                  data-seat-no="4"
+                  data-status="<%= seat4.status %>"
+                  <%= seat4.status !== 'tersedia' ? 'disabled' : '' %>
+                  aria-label="Kursi 4, Status: <%= seat4.status %>">
+            <span class="text-base font-extrabold leading-none">4</span>
+            <span class="text-[9px] uppercase font-bold leading-none mt-1"><%= seat4.status %></span>
+          </button>
+        <% } %>
+      </div>
+
+      <!-- Kursi 5 -->
+      <div class="text-center">
+        <% if (seat5) { %>
+          <button type="button"
+                  class="seat-btn seat-tile
+                         <%= seat5.status === 'tersedia' ? 'bg-paper-3 border-bar border-rule text-ink hover:border-accent cursor-pointer' : '' %>
+                         <%= seat5.status === 'ditahan' ? 'bg-accent-2 border-bar border-ink text-ink cursor-not-allowed' : '' %>
+                         <%= seat5.status === 'terjual' ? 'bg-paper-2 border-bar border-rule text-muted cursor-not-allowed opacity-40' : '' %>"
+                  data-seat-id="<%= seat5.id %>"
+                  data-seat-no="5"
+                  data-status="<%= seat5.status %>"
+                  <%= seat5.status !== 'tersedia' ? 'disabled' : '' %>
+                  aria-label="Kursi 5, Status: <%= seat5.status %>">
+            <span class="text-base font-extrabold leading-none">5</span>
+            <span class="text-[9px] uppercase font-bold leading-none mt-1"><%= seat5.status %></span>
+          </button>
+        <% } %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Legend Status Kursi: Square Transit Swatches -->
+  <div class="mt-8 pt-4 border-t-bar border-rule grid grid-cols-3 gap-2 text-center text-xs">
+    <div class="flex items-center justify-center gap-1.5">
+      <span class="w-3.5 h-3.5 bg-paper-3 border-bar border-rule inline-block"></span>
+      <span class="text-ink font-bold">Tersedia</span>
+    </div>
+    <div class="flex items-center justify-center gap-1.5">
+      <span class="w-3.5 h-3.5 bg-accent-2 border-bar border-ink inline-block"></span>
+      <span class="text-ink font-bold">Ditahan</span>
+    </div>
+    <div class="flex items-center justify-center gap-1.5">
+      <span class="w-3.5 h-3.5 bg-paper-2 border-bar border-rule opacity-40 inline-block"></span>
+      <span class="text-muted font-bold">Terjual</span>
+    </div>
+  </div>
+</div>

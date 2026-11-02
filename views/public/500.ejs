@@ -1,0 +1,14 @@
+<div class="text-center py-20 max-w-lg mx-auto">
+  <div class="inline-flex items-center justify-center w-16 h-16 border-bar border-[var(--color-error)] bg-paper-2 text-[var(--color-error)] mb-6 font-mono text-2xl font-black">
+    500
+  </div>
+  <h1 class="text-2xl font-extrabold text-ink tracking-tight uppercase">Kendala Sistem Terminal</h1>
+  <p class="mt-3 text-xs text-muted max-w-lg mx-auto">
+    <%= typeof message !== 'undefined' ? message : 'Sistem sedang mengalami kendala internal dalam memproses permintaan Anda. Silakan coba beberapa saat lagi.' %>
+  </p>
+  <div class="mt-8 flex justify-center gap-4">
+    <a href="/" class="transit-btn transit-btn-cobalt py-2.5 px-5 text-xs font-bold">
+      Beranda Utama
+    </a>
+  </div>
+</div>

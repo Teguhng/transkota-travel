@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'TRANSKOTA - Tiket Travel & Minibus Antarkota Eksekutif' %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Chivo+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/output.css">
+  <script src="/js/theme-toggle.js"></script>
+</head>
+<body class="min-h-full flex flex-col bg-paper text-ink font-sans antialiased selection:bg-accent-2 selection:text-ink">
+
+  <%- include('../partials/navbar') %>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+    <%- include('../partials/flash') %>
+    <%- body %>
+  </main>
+
+  <%- include('../partials/footer') %>
+
+</body>
+</html>

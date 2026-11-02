@@ -1,0 +1,45 @@
+<div class="max-w-md mx-auto my-8">
+  <div class="transit-box p-6 sm:p-8">
+    <div class="text-center">
+      <div class="w-12 h-12 transit-plate mx-auto flex items-center justify-center font-extrabold text-xl mb-4">
+        *
+      </div>
+      <h1 class="text-xl font-extrabold text-ink uppercase tracking-tight">Aktivasi Kata Sandi</h1>
+      <p class="mt-2 text-xs text-muted">Validasi kepemilikan akun legacy dan perbarui kata sandi akun Anda.</p>
+    </div>
+
+    <form action="/auth/activate" method="POST" class="mt-6 space-y-4">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div>
+        <label for="username" class="block text-xs font-bold uppercase text-ink mb-1.5">Username Terdaftar *</label>
+        <input type="text" id="username" name="username" value="<%= defaultUsername || '' %>" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="Username akun Anda">
+      </div>
+
+      <div>
+        <label for="phone_or_email" class="block text-xs font-bold uppercase text-ink mb-1.5">Nomor Telepon atau Email *</label>
+        <input type="text" id="phone_or_email" name="phone_or_email" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="Nomor HP atau email terdaftar">
+      </div>
+
+      <div>
+        <label for="new_password" class="block text-xs font-bold uppercase text-ink mb-1.5">Kata Sandi Baru *</label>
+        <input type="password" id="new_password" name="new_password" minlength="6" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="Minimal 6 karakter">
+      </div>
+
+      <div>
+        <label for="confirm_password" class="block text-xs font-bold uppercase text-ink mb-1.5">Konfirmasi Kata Sandi Baru *</label>
+        <input type="password" id="confirm_password" name="confirm_password" minlength="6" required class="w-full border-bar border-rule bg-paper px-3.5 py-2 text-xs font-bold text-ink focus:outline-none focus:border-accent" placeholder="Ulangi kata sandi baru">
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" class="w-full transit-btn transit-btn-cobalt py-3 text-xs">
+          Simpan Sandi & Aktifkan
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-6 pt-6 border-t-hair border-rule text-center text-xs text-muted">
+      Sudah selesai aktivasi? <a href="/login" class="font-bold text-accent hover:underline">Masuk ke Akun</a>
+    </div>
+  </div>
+</div>

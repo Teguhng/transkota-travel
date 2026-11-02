@@ -1,0 +1,78 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-bar border-rule pb-4">
+    <div>
+      <div class="inline-block px-2.5 py-0.5 mb-1 border-hair border-rule text-xs font-bold uppercase text-accent bg-paper-3">
+        Arsip Tiket
+      </div>
+      <h1 class="text-xl sm:text-2xl font-extrabold text-ink uppercase tracking-tight">Riwayat Tiket Perjalanan</h1>
+      <p class="text-xs text-muted mt-1">Daftar seluruh reservasi tiket travel antarkota yang tercatat pada akun Anda.</p>
+    </div>
+    <a href="/jadwal" class="transit-btn transit-btn-cobalt py-2 px-4 text-xs font-bold">
+      Pesan Tiket Baru
+    </a>
+  </div>
+
+  <% if (bookings.length === 0) { %>
+    <div class="text-center py-16 transit-box">
+      <h3 class="text-xs font-bold uppercase text-ink">Belum Ada Pesanan Tiket</h3>
+      <p class="mt-1 text-xs text-muted">Anda belum pernah melakukan reservasi tiket travel antarkota.</p>
+      <div class="mt-6">
+        <a href="/jadwal" class="transit-btn transit-btn-cobalt py-2 px-4 text-xs font-bold">
+          Papan Jadwal Travel
+        </a>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="grid grid-cols-1 gap-4">
+      <% bookings.forEach(b => { 
+           const depDate = new Date(b.berangkat_pada);
+           const isLunas = b.status === 'lunas';
+           const isWaiting = b.status === 'menunggu_pembayaran';
+      %>
+        <div class="transit-box p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-ink transition-colors">
+          <div class="space-y-2 flex-grow">
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-base font-extrabold text-accent"><%= b.kode_booking %></span>
+              <span class="px-2 py-0.5 border-hair border-rule text-[10px] font-extrabold uppercase
+                <%= isLunas ? 'text-accent bg-paper-3' : '' %>
+                <%= isWaiting ? 'bg-accent-2 text-ink' : '' %>
+                <%= !isLunas && !isWaiting ? 'text-muted bg-paper-3' : '' %>">
+                <%= b.status.replace('_', ' ') %>
+              </span>
+            </div>
+
+            <div class="text-base font-extrabold text-ink uppercase flex items-center gap-2">
+              <span><%= b.kota_asal %></span>
+              <span class="text-muted font-mono">&rarr;</span>
+              <span><%= b.kota_tujuan %></span>
+            </div>
+
+            <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted">
+              <span>Keberangkatan: <strong class="text-ink"><%= depDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) %>, <%= depDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) %> WIB</strong></span>
+              <span>Armada: <strong class="text-ink"><%= b.kendaraan_jenis || 'Minibus' %> (<%= b.nomor_polisi %>)</strong></span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between md:flex-col md:items-end gap-3 pt-4 md:pt-0 border-t-hair md:border-t-0 border-rule">
+            <div class="text-left md:text-right">
+              <span class="text-[11px] text-muted uppercase font-bold block">Total Tagihan</span>
+              <span class="text-base font-extrabold text-ink num">
+                <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(b.total_harga) %>
+              </span>
+            </div>
+            <div class="flex gap-2">
+              <a href="/pesanan/<%= b.kode_booking %>" class="transit-btn transit-btn-ink py-1.5 px-3 text-xs">
+                Detail
+              </a>
+              <% if (isLunas) { %>
+                <a href="/pesanan/<%= b.kode_booking %>/cetak" target="_blank" class="transit-btn transit-btn-cobalt py-1.5 px-3 text-xs">
+                  Cetak E-Tiket
+                </a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
