@@ -171,20 +171,6 @@ npm run typecheck
 ```
 
 ---
-
-## Langkah Push ke GitHub
-
-Untuk mengunggah repository ini ke GitHub:
-
-```bash
-git init
-git add .
-git commit -m "feat: inisialisasi sistem pemesanan tiket travel transkota"
-git branch -M main
-git remote add origin https://github.com/rizkyaa-dev/transkota-travel.git
-git push -u origin main
-```
-
 ---
 
 ## Lisensi
