@@ -98,7 +98,7 @@ export class PembayaranRepository {
              u.nama AS nama_pemesan, u.telepon AS telepon_pemesan,
              ka.nama AS kota_asal, kt.nama AS kota_tujuan
       FROM pembayaran p
-      JOIN pemesanan o ON o.id = p.id_pemesan
+      JOIN pemesanan o ON o.id = p.id_pemesanan
       JOIN users u ON u.id = o.id_pemesan
       JOIN jadwal j ON j.id = o.id_jadwal
       JOIN rute r ON r.id = j.id_rute

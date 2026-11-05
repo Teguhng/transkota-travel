@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Tiket Travel Antarkota - <%= booking.kode_booking %></title>
+  <title>E-Tiket Travel Antarkota - <%= booking.kode_booking %>
+  </title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/css/output.css">
 </head>
+
 <body class="bg-paper text-ink font-mono p-4 sm:p-8 tabular-nums">
 
   <div class="max-w-3xl mx-auto space-y-4">
     <!-- Tombol Cetak / Navigasi (Disembunyikan saat dicetak) -->
     <div class="no-print flex items-center justify-between p-4 border-bar border-rule bg-paper-2">
-      <a href="/pesanan/<%= booking.kode_booking %>" class="text-xs font-bold uppercase text-ink hover:underline inline-flex items-center gap-1">
+      <a href="/pesanan/<%= booking.kode_booking %>"
+        class="text-xs font-bold uppercase text-ink hover:underline inline-flex items-center gap-1">
         &larr; Detail Pesanan
       </a>
       <button onclick="window.print()" class="transit-btn transit-btn-cobalt py-2 px-4 text-xs font-bold uppercase">
@@ -35,8 +40,11 @@
         </div>
         <div class="text-left sm:text-right">
           <span class="text-[10px] uppercase tracking-widest opacity-80 block">KODE BOARDING PASS</span>
-          <span class="font-mono text-2xl font-black tracking-wider text-accent-2"><%= booking.kode_booking %></span>
-          <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border-hair border-paper mt-1">
+          <span class="font-mono text-2xl font-black tracking-wider text-accent-2">
+            <%= booking.kode_booking %>
+          </span>
+          <span
+            class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider border-hair border-paper mt-1">
             Status: LUNAS / TERKONFIRMASI
           </span>
         </div>
@@ -47,7 +55,9 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
             <span class="text-xs uppercase tracking-wider text-muted font-bold block">Stasiun Asal</span>
-            <span class="text-xl font-extrabold text-ink block mt-0.5 uppercase"><%= booking.kota_asal %></span>
+            <span class="text-xl font-extrabold text-ink block mt-0.5 uppercase">
+              <%= booking.kota_asal %>
+            </span>
             <span class="text-xs text-muted">Pool Keberangkatan</span>
           </div>
 
@@ -58,12 +68,16 @@
               <span class="text-muted text-xs">&rarr;</span>
               <span class="h-0.5 w-12 bg-rule"></span>
             </div>
-            <span class="text-xs font-bold text-ink"><%= booking.nomor_polisi %></span>
+            <span class="text-xs font-bold text-ink">
+              <%= booking.nomor_polisi %>
+            </span>
           </div>
 
           <div class="sm:text-right">
             <span class="text-xs uppercase tracking-wider text-muted font-bold block">Stasiun Tujuan</span>
-            <span class="text-xl font-extrabold text-ink block mt-0.5 uppercase"><%= booking.kota_tujuan %></span>
+            <span class="text-xl font-extrabold text-ink block mt-0.5 uppercase">
+              <%= booking.kota_tujuan %>
+            </span>
             <span class="text-xs text-muted">Pool Kedatangan</span>
           </div>
         </div>
@@ -71,20 +85,29 @@
         <div class="mt-6 pt-4 border-t-hair border-rule grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
           <div>
             <span class="text-muted uppercase font-bold block">Tanggal Berangkat</span>
-            <% const bDate = new Date(booking.berangkat_pada); %>
-            <strong class="text-ink"><%= bDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) %></strong>
+            <% const bDate=new Date(booking.berangkat_pada); %>
+              <strong class="text-ink">
+                <%= bDate.toLocaleDateString('id-ID', { day: 'numeric' , month: 'short' , year: 'numeric' }) %>
+              </strong>
           </div>
           <div>
             <span class="text-muted uppercase font-bold block">Waktu Keberangkatan</span>
-            <strong class="text-ink"><%= bDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) %> WIB</strong>
+            <strong class="text-ink">
+              <%= bDate.toLocaleTimeString('id-ID', { hour: '2-digit' , minute: '2-digit' }) %> WIB
+            </strong>
           </div>
           <div>
             <span class="text-muted uppercase font-bold block">Nama Pemesan</span>
-            <strong class="text-ink"><%= booking.nama_pemesan %></strong>
+            <strong class="text-ink">
+              <%= booking.nama_pemesan %>
+            </strong>
           </div>
           <div class="sm:text-right">
             <span class="text-muted uppercase font-bold block">Total Tarif</span>
-            <strong class="text-ink num"><%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(booking.total_harga) %></strong>
+            <strong class="text-ink num">
+              <%= new Intl.NumberFormat('id-ID', { style: 'currency' , currency: 'IDR' , maximumFractionDigits: 0
+                }).format(booking.total) %>
+            </strong>
           </div>
         </div>
       </div>
@@ -102,40 +125,49 @@
             </tr>
           </thead>
           <tbody>
-            <% 
-              const pList = (booking.details && booking.details.length > 0) ? booking.details : (booking.penumpang || []);
-              pList.forEach(p => { 
-            %>
+            <% const pList=(booking.details && booking.details.length> 0) ? booking.details : (booking.penumpang || []);
+              pList.forEach(p => {
+              %>
               <tr>
-                <td class="border-hair border-rule p-2.5 font-bold text-accent">Kursi <%= p.nomor_kursi || p.nomor %></td>
-                <td class="border-hair border-rule p-2.5 font-bold text-ink"><%= p.nama_penumpang || p.nama %></td>
-                <td class="border-hair border-rule p-2.5 text-muted"><%= p.telepon_penumpang || p.telepon || '-' %></td>
+                <td class="border-hair border-rule p-2.5 font-bold text-accent">Kursi <%= p.nomor_kursi || p.nomor %>
+                </td>
+                <td class="border-hair border-rule p-2.5 font-bold text-ink">
+                  <%= p.nama_penumpang || p.nama %>
+                </td>
+                <td class="border-hair border-rule p-2.5 text-muted">
+                  <%= p.telepon_penumpang || p.telepon || '-' %>
+                </td>
                 <td class="border-hair border-rule p-2.5 text-center">
                   <span class="px-2 py-0.5 border-hair border-rule text-[10px] font-bold uppercase bg-paper-2 text-ink">
                     Terkonfirmasi
                   </span>
                 </td>
               </tr>
-            <% }) %>
+              <% }) %>
           </tbody>
         </table>
 
         <!-- Syarat & Ketentuan Boarding -->
         <div class="mt-6 p-4 border-bar border-rule bg-paper-2 text-xs text-muted space-y-1">
           <p class="font-bold text-ink uppercase">Ketentuan Keberangkatan Penumpang:</p>
-          <p>1. Penumpang wajib tiba di terminal pool paling lambat <strong>30 menit</strong> sebelum jadwal berangkat.</p>
-          <p>2. Tunjukkan lembar e-tiket fisik ini atau tangkapan layar ponsel kepada operator loket saat proses boarding.</p>
+          <p>1. Penumpang wajib tiba di terminal pool paling lambat <strong>30 menit</strong> sebelum jadwal berangkat.
+          </p>
+          <p>2. Tunjukkan lembar e-tiket fisik ini atau tangkapan layar ponsel kepada operator loket saat proses
+            boarding.</p>
           <p>3. Kapasitas bagasi gratis maksimal 1 koper/tas sedang (15 kg) per penumpang.</p>
         </div>
       </div>
 
       <!-- Footer Barcode & Verifikasi -->
-      <div class="bg-paper-2 p-4 border-t-bar border-rule flex flex-col sm:flex-row items-center justify-between text-xs text-muted gap-2">
-        <div class="font-bold uppercase">VERIFIED BY SISTEM TRAVEL &bull; RESERVASI #<%= booking.id %></div>
+      <div
+        class="bg-paper-2 p-4 border-t-bar border-rule flex flex-col sm:flex-row items-center justify-between text-xs text-muted gap-2">
+        <div class="font-bold uppercase">VERIFIED BY SISTEM TRAVEL &bull; RESERVASI #<%= booking.id %>
+        </div>
         <div class="text-[11px] tracking-widest text-ink">||||| | |||| |||||| || ||||| |||||||</div>
       </div>
     </div>
   </div>
 
 </body>
+
 </html>
