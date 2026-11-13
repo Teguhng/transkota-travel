@@ -18,9 +18,10 @@ async function main() {
     process.exit(1);
   }
 
-  // Waktu keberangkatan upcoming relatif terhadap saat script dijalankan (WIB)
+  // Waktu keberangkatan upcoming relatif terhadap saat script dijalankan (WIB).
+  // Format waktu lokal agar tidak menggeser jadwal ke UTC saat disimpan ke MySQL.
   const now = new Date();
-  
+
   const schedulesToSeed = [
     {
       routeId: routes[0].id,
@@ -51,15 +52,26 @@ async function main() {
       vehicleId: vehicles[0].id,
       hoursAhead: 48,
       harga: 85000
+    },
+    {
+      routeId: routes[1] ? routes[1].id : routes[0].id,
+      vehicleId: vehicles[1] ? vehicles[1].id : vehicles[0].id,
+      hoursAhead: 56,
+      harga: 95000
     }
   ];
+
+  const toMysqlLocalDateTime = (date: Date) => {
+    const pad = (value: number) => String(value).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+  };
 
   for (const item of schedulesToSeed) {
     const depTime = new Date(now.getTime() + item.hoursAhead * 3600 * 1000);
     const arrTime = new Date(depTime.getTime() + 4 * 3600 * 1000); // estimasi 4 jam perjalanan
 
-    const depFormatted = depTime.toISOString().slice(0, 19).replace('T', ' ');
-    const arrFormatted = arrTime.toISOString().slice(0, 19).replace('T', ' ');
+    const depFormatted = toMysqlLocalDateTime(depTime);
+    const arrFormatted = toMysqlLocalDateTime(arrTime);
 
     // Cek apakah jadwal serupa sudah ada agar idempoten
     const [existing] = await pool.query<RowDataPacket[]>(
