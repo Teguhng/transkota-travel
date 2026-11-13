@@ -4,7 +4,7 @@ import { bookingService } from '../services/booking.service.js';
 import { paymentService } from '../services/payment.service.js';
 import { pemesananRepository } from '../repositories/pemesanan.repository.js';
 import { keluhanRepository } from '../repositories/keluhan.repository.js';
-import { generateCode128Svg } from '../utils/barcode.js';
+import { generateQrCodeSvg } from '../utils/qrcode.js';
 
 export class MemberController {
   async showSeatSelection(req: Request, res: Response, next: NextFunction) {
@@ -165,13 +165,13 @@ export class MemberController {
       const user = req.session.user!;
       const code = req.params.kode;
       const { booking, payment } = await bookingService.getInvoiceByCode(code, user);
-      const barcodeSvg = generateCode128Svg(booking.kode_booking || String(booking.id));
+      const qrCodeSvg = generateQrCodeSvg(booking.kode_booking || String(booking.id));
 
       res.render('member/print-ticket', {
         title: `Cetak E-Tiket: ${booking.kode_booking}`,
         booking,
         payment,
-        barcodeSvg,
+        qrCodeSvg,
         layout: false // Render halaman cetak bersih tanpa navbar/footer
       });
     } catch (err: any) {

@@ -158,12 +158,12 @@
         </div>
       </div>
 
-      <!-- Footer Barcode & Verifikasi -->
+      <!-- Footer QR Code & Verifikasi -->
       <div
-        class="bg-paper-2 p-4 border-t-bar border-rule flex flex-col sm:flex-row items-center justify-between text-xs text-muted gap-2">
-        <div class="font-bold uppercase">VERIFIED BY SISTEM TRAVEL &bull; RESERVASI #<%= booking.id %>
+        class="bg-paper-2 p-4 border-t-bar border-rule flex flex-col sm:flex-row items-center justify-between text-xs text-muted gap-3">
+        <div class="font-bold uppercase text-center sm:text-left">VERIFIED BY SISTEM TRAVEL &bull; RESERVASI #<%= booking.id %>
         </div>
-        <div class="text-ink shrink-0 max-w-full min-w-0"><%- barcodeSvg %></div>
+        <div class="bg-paper-3 border-hair border-rule p-1 text-ink shrink-0"><%- qrCodeSvg %></div>
       </div>
     </div>
   </div>
