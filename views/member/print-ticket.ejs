@@ -31,16 +31,17 @@
     <div class="ticket-card border-bar border-ink bg-paper-3 overflow-hidden">
       <!-- Kop Tiket -->
       <div class="bg-ink text-paper p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
+        <div class="shrink-0">
           <div class="flex items-center gap-2">
-            <span class="w-7 h-7 bg-paper text-ink flex items-center justify-center font-extrabold text-sm">T</span>
+            <span class="w-7 h-7 shrink-0 bg-paper text-ink flex items-center justify-center font-extrabold text-sm">T</span>
             <span class="font-extrabold tracking-tight text-base uppercase">TRAVEL NUSANTARA JAYA</span>
           </div>
           <p class="text-xs opacity-80 mt-1 uppercase">Layanan Minibus Antarkota Terjadwal</p>
         </div>
-        <div class="text-left sm:text-right">
+        <div class="text-left sm:text-right min-w-0 max-w-full">
           <span class="text-[10px] uppercase tracking-widest opacity-80 block">KODE BOARDING PASS</span>
-          <span class="font-mono text-2xl font-black tracking-wider text-accent-2">
+          <% const kodeBooking = String(booking.kode_booking || ''); const isLongCode = kodeBooking.length > 16; %>
+          <span class="font-mono font-black text-accent-2 block leading-snug <%= isLongCode ? 'text-sm sm:text-base tracking-normal break-all' : 'text-2xl tracking-wider' %>">
             <%= booking.kode_booking %>
           </span>
           <span
@@ -160,7 +161,7 @@
 
       <!-- Footer QR Code & Verifikasi -->
       <div
-        class="bg-paper-2 p-4 border-t-bar border-rule flex flex-col sm:flex-row items-center justify-between text-xs text-muted gap-3">
+        class="bg-paper-2 px-6 py-4 border-t-bar border-rule flex flex-col sm:flex-row items-center justify-between text-xs text-muted gap-3">
         <div class="font-bold uppercase text-center sm:text-left">VERIFIED BY SISTEM TRAVEL &bull; RESERVASI #<%= booking.id %>
         </div>
         <div class="bg-paper-3 border-hair border-rule p-1 text-ink shrink-0"><%- qrCodeSvg %></div>
