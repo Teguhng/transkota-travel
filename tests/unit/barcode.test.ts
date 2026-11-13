@@ -134,9 +134,10 @@ describe('Code 128 Barcode Generator', () => {
     expect(decodeSvgToText(generateCode128Svg('TRV-20261113-0001'))).toBe('TRV-20261113-0001');
   });
 
-  it('rejects empty or non-ASCII-printable strings and escapes XML attributes', () => {
+  it('rejects empty or non-ASCII-printable strings and keeps aria-label aligned with encoded payload', () => {
     expect(() => generateCode128Svg('')).toThrow();
-    const svg = generateCode128Svg('A&B"C');
+    expect(() => generateCode128Svg('✓✓✓')).toThrow();
+    const svg = generateCode128Svg('A&B"C✓');
     expect(svg).toContain('aria-label="Barcode A&amp;B&quot;C"');
     expect(decodeSvgToText(svg)).toBe('A&B"C');
   });

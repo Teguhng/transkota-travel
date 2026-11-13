@@ -43,15 +43,20 @@ function countConsecutiveDigits(input: string, start: number): number {
   return count;
 }
 
+function sanitizeCode128Input(rawValue: string): string {
+  const sanitized = rawValue.replace(/[^\x20-\x7e]/g, '');
+  if (!sanitized) {
+    throw new Error('Kode barcode harus berisi karakter ASCII cetak.');
+  }
+  return sanitized;
+}
+
 /**
  * Encodes printable ASCII text into ISO/IEC 15417 Code 128 symbol values
  * (start symbol, data symbols, modulo-103 checksum, and stop symbol).
  */
 export function encodeCode128(rawValue: string): number[] {
-  const sanitized = rawValue.replace(/[^\x20-\x7e]/g, '');
-  if (!sanitized) {
-    throw new Error('Kode barcode harus berisi karakter ASCII cetak.');
-  }
+  const sanitized = sanitizeCode128Input(rawValue);
 
   const codes: number[] = [];
   const initialDigits = countConsecutiveDigits(sanitized, 0);
@@ -116,7 +121,8 @@ export function generateCode128Svg(value: string, options: Code128SvgOptions = {
   const height = options.height ?? 24;
   const quietZoneModules = options.quietZoneModules ?? 10;
 
-  const codes = encodeCode128(value);
+  const sanitized = sanitizeCode128Input(value);
+  const codes = encodeCode128(sanitized);
   const rects: string[] = [];
   let cursorModules = quietZoneModules;
 
@@ -135,7 +141,7 @@ export function generateCode128Svg(value: string, options: Code128SvgOptions = {
   }
 
   const totalWidth = (cursorModules + quietZoneModules) * moduleWidth;
-  const label = escapeXmlAttr(value);
+  const label = escapeXmlAttr(sanitized);
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${height}" viewBox="0 0 ${totalWidth} ${height}" shape-rendering="crispEdges" role="img" aria-label="Barcode ${label}" style="display:block;max-width:100%;height:auto;">`,
