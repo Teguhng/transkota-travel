@@ -13,6 +13,7 @@ import { startExpiryWorker, stopExpiryWorker } from './services/expiry.worker.js
 import { pool } from './config/database.js';
 import { ensureDatabaseInitialized } from './scripts/initDb.js';
 import { ensureUpcomingSchedules } from './scripts/seedDemoSchedules.js';
+import { ensureDemoPasswordsSeeded } from './scripts/seedPasswords.js';
 
 export const app = express();
 
@@ -128,6 +129,7 @@ let server: ReturnType<typeof app.listen> | null = null;
 async function bootstrap() {
   try {
     await ensureDatabaseInitialized();
+    await ensureDemoPasswordsSeeded();
     await ensureUpcomingSchedules(60);
   } catch (err) {
     console.error('[Bootstrap] Gagal menginisialisasi database:', err);
