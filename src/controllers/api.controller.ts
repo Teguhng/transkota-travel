@@ -645,6 +645,7 @@ export class ApiController {
 
       res.setHeader('Content-Disposition', `inline; filename="${safeFilename}"`);
       res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Cache-Control', 'private, max-age=3600');
       return res.sendFile(filePath);
     } catch (err) {
       return next(err);

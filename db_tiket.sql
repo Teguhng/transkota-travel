@@ -23,6 +23,7 @@ CREATE TABLE users (
  dibuat_pada DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
  diperbarui_pada DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  UNIQUE KEY uq_users_legacy (sumber_legacy,id_legacy),
+ KEY ix_users_telepon (telepon,role),
  CONSTRAINT ck_users_password CHECK (wajib_reset_password IN (0,1) AND
    (wajib_reset_password = 1 OR password_hash IS NOT NULL))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

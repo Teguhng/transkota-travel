@@ -106,6 +106,7 @@ export class PembayaranRepository {
       JOIN kota kt ON kt.id = r.id_kota_tujuan
       WHERE p.status = 'menunggu'
       ORDER BY p.diajukan_pada ASC
+      LIMIT 200
     `;
     const [rows] = await pool.query<RowDataPacket[]>(sql);
     return rows as PembayaranRow[];

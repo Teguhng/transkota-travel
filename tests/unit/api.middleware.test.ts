@@ -312,6 +312,37 @@ describe('API Security & Validation Middleware Tests', () => {
       expect(res3.statusCode).toBe(429);
       expect(res3.body.error.code).toBe('RATE_LIMIT_EXCEEDED');
     });
+
+    it('should evict oldest IP entry via FIFO when maxEntries bound is reached', () => {
+      const limiter = createApiRateLimiter({
+        windowMs: 60_000,
+        max: 1,
+        keyPrefix: 'bounded',
+        maxEntries: 2,
+      });
+
+      const res1 = createMockRes();
+      limiter({ ip: '10.0.0.1' } as unknown as Request, res1, vi.fn());
+      expect(res1.statusCode).toBe(200);
+
+      const res2 = createMockRes();
+      limiter({ ip: '10.0.0.2' } as unknown as Request, res2, vi.fn());
+      expect(res2.statusCode).toBe(200);
+
+      // Mengisi entri ke-3 harus menyingkirkan 10.0.0.1 agar memori terikat <= 2 entri
+      const res3 = createMockRes();
+      limiter({ ip: '10.0.0.3' } as unknown as Request, res3, vi.fn());
+      expect(res3.statusCode).toBe(200);
+
+      // Karena 10.0.0.1 sudah ter-evict, permintaan barunya tidak terkena 429 dan 10.0.0.2 yang masih tersisa tetap kena 429
+      const res2Again = createMockRes();
+      limiter({ ip: '10.0.0.2' } as unknown as Request, res2Again, vi.fn());
+      expect(res2Again.statusCode).toBe(429);
+
+      const res1Again = createMockRes();
+      limiter({ ip: '10.0.0.1' } as unknown as Request, res1Again, vi.fn());
+      expect(res1Again.statusCode).toBe(200);
+    });
   });
 
   describe('csrfMiddleware & API error mapping', () => {

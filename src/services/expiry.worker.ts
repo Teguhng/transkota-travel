@@ -24,11 +24,19 @@ export async function runHoldSeatCleanup(): Promise<void> {
 export function startExpiryWorker(intervalMs: number = 5 * 60 * 1000): void {
   if (intervalHandle) {
     clearInterval(intervalHandle);
+    intervalHandle = null;
   }
+
+  if (intervalMs <= 0) {
+    console.log('[Expiry Worker] Background worker dinonaktifkan (mengandalkan lazy cleanup DB).');
+    return;
+  }
+
   console.log(`[Expiry Worker] Background worker diaktifkan (interval: ${intervalMs / 1000} detik).`);
   // Jalankan segera saat pertama kali start
   runHoldSeatCleanup();
   intervalHandle = setInterval(runHoldSeatCleanup, intervalMs);
+  intervalHandle.unref?.();
 }
 
 export function stopExpiryWorker(): void {

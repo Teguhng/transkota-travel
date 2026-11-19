@@ -34,13 +34,14 @@ export class JadwalRepository {
       params.push(destCityId);
     }
     if (dateStr) {
-      sql += ' AND DATE(j.berangkat_pada) = ?';
-      params.push(dateStr);
+      sql += ' AND j.berangkat_pada >= ? AND j.berangkat_pada < DATE_ADD(?, INTERVAL 1 DAY)';
+      params.push(dateStr, dateStr);
     }
 
     sql += `
       GROUP BY j.id
       ORDER BY j.berangkat_pada ASC
+      LIMIT 100
     `;
 
     const [rows] = await pool.query<RowDataPacket[]>(sql, params);
@@ -61,6 +62,7 @@ export class JadwalRepository {
       LEFT JOIN jadwal_kursi s ON s.id_jadwal = j.id
       GROUP BY j.id
       ORDER BY j.berangkat_pada DESC
+      LIMIT 100
     `;
     const [rows] = await pool.query<RowDataPacket[]>(sql);
     return rows as JadwalRow[];
@@ -107,7 +109,7 @@ export class JadwalRepository {
       SELECT DISTINCT p.id_jadwal
       FROM pemesanan p
       JOIN jadwal j ON j.id = p.id_jadwal
-      WHERE p.status = 'menunggu_pembayaran'
+      WHERE p.status IN ('menunggu_pembayaran', 'menunggu_verifikasi')
         AND p.jatuh_tempo <= NOW()
         AND j.berangkat_pada >= NOW() - INTERVAL 1 DAY
     `;

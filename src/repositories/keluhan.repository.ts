@@ -24,6 +24,7 @@ export class KeluhanRepository {
       LEFT JOIN pemesanan p ON p.id = k.id_pemesanan
       WHERE k.id_user = ?
       ORDER BY k.dibuat_pada DESC
+      LIMIT 200
     `;
     const [rows] = await pool.query<RowDataPacket[]>(sql, [userId]);
     return rows as KeluhanRow[];
@@ -42,6 +43,7 @@ export class KeluhanRepository {
              WHEN k.status = 'diproses' THEN 2 
              ELSE 3 END,
         k.dibuat_pada DESC
+      LIMIT 200
     `;
     const [rows] = await pool.query<RowDataPacket[]>(sql);
     return rows as KeluhanRow[];

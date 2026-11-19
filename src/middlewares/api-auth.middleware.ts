@@ -211,26 +211,37 @@ export function createApiRateLimiter(options: {
   windowMs: number;
   max: number;
   keyPrefix?: string;
+  maxEntries?: number;
 }) {
   const store = new Map<string, RateLimitEntry>();
   const keyPrefix = options.keyPrefix || 'api';
+  const maxEntries = options.maxEntries ?? 2000;
 
   return (req: Request, res: Response, next: NextFunction): void => {
     const now = Date.now();
     const clientIp = req.ip || req.socket?.remoteAddress || 'unknown';
     const key = `${keyPrefix}:${clientIp}`;
 
-    // Bersihkan entri kedaluwarsa secara malas agar memori tetap terikat
-    if (store.size > 5000) {
-      for (const [k, entry] of store.entries()) {
-        if (entry.resetAt <= now) {
-          store.delete(k);
-        }
-      }
-    }
-
     let entry = store.get(key);
     if (!entry || entry.resetAt <= now) {
+      if (entry) {
+        store.delete(key);
+      }
+
+      if (store.size >= maxEntries) {
+        for (const [k, existing] of store.entries()) {
+          if (existing.resetAt <= now) {
+            store.delete(k);
+          }
+        }
+      }
+
+      while (store.size >= maxEntries) {
+        const oldestKey = store.keys().next().value;
+        if (oldestKey === undefined) break;
+        store.delete(oldestKey);
+      }
+
       entry = {
         count: 1,
         resetAt: now + options.windowMs,

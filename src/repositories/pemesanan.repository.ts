@@ -87,6 +87,7 @@ export class PemesananRepository {
       JOIN kendaraan k ON k.id = j.id_kendaraan
       WHERE p.id_pemesan = ?
       ORDER BY p.dibuat_pada DESC
+      LIMIT 200
     `;
     const [rows] = await pool.query<RowDataPacket[]>(sql, [userId]);
     return rows as PemesananRow[];

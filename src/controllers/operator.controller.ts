@@ -71,6 +71,7 @@ export class OperatorController {
 
       res.setHeader('Content-Disposition', `inline; filename="${safeFilename}"`);
       res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Cache-Control', 'private, max-age=3600');
       res.sendFile(filePath);
     } catch (err) {
       next(err);

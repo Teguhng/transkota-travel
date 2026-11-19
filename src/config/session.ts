@@ -1,16 +1,17 @@
 import session from 'express-session';
 import MySQLSessionStore from 'express-mysql-session';
 import { env } from './env.js';
+import { pool } from './database.js';
 
 const MySQLStore = MySQLSessionStore(session as any);
 
 const sessionStoreOptions = {
-  host: env.DB_HOST,
-  port: env.DB_PORT,
-  user: env.DB_USER,
-  password: env.DB_PASSWORD,
-  database: env.DB_NAME,
   createDatabaseTable: true,
+  clearExpired: true,
+  checkExpirationInterval: 60 * 60 * 1000, // 1 jam (hemat CPU/IOPS MySQL)
+  expiration: 24 * 60 * 60 * 1000,
+  disableTouch: true, // Hindari UPDATE sessions pada setiap request baca
+  endConnectionOnClose: false, // Pool dikelola terpusat oleh database.ts
   schema: {
     tableName: 'sessions',
     columnNames: {
@@ -21,7 +22,7 @@ const sessionStoreOptions = {
   }
 };
 
-export const sessionStore = new MySQLStore(sessionStoreOptions);
+export const sessionStore = new (MySQLStore as any)(sessionStoreOptions, pool as any);
 
 export const sessionMiddleware = session({
   name: 'travel_sid',

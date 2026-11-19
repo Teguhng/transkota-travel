@@ -82,7 +82,7 @@ export class UserRepository {
       sql += ' WHERE role = ?';
       params.push(roleFilter);
     }
-    sql += ' ORDER BY id DESC';
+    sql += ' ORDER BY id DESC LIMIT 200';
     const [rows] = await pool.query<RowDataPacket[]>(sql, params);
     return rows as UserRow[];
   }
