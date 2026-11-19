@@ -92,7 +92,7 @@ export interface JadwalKursiRow {
 export interface PemesananRow {
   id: number;
   kode_booking: string;
-  id_pemesan: number;
+  id_pemesan: number | string;
   id_jadwal: number;
   status: PemesananStatus;
   total: string | number;

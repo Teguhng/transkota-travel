@@ -90,8 +90,8 @@ export class BookingService {
       throw new Error('Pesanan dengan kode tersebut tidak ditemukan.');
     }
 
-    // Akses diizinkan untuk pemilik pesanan atau staf loket/admin
-    if (requestingUser.role === 'member' && booking.id_pemesan !== requestingUser.id) {
+    // MySQL mengembalikan ID BIGINT sebagai string.
+    if (requestingUser.role === 'member' && String(booking.id_pemesan) !== String(requestingUser.id)) {
       throw new Error('Anda tidak memiliki akses ke tiket ini.');
     }
 
