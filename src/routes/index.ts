@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { apiRouter } from './api.routes.js';
 import { publicRouter } from './public.routes.js';
 import { authRouter } from './auth.routes.js';
 import { memberRouter } from './member.routes.js';
@@ -7,6 +8,7 @@ import { adminRouter } from './admin.routes.js';
 
 export const appRouter = Router();
 
+appRouter.use(apiRouter);
 appRouter.use(publicRouter);
 appRouter.use(authRouter);
 appRouter.use(memberRouter);

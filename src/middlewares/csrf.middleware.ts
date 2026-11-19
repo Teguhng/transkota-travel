@@ -15,8 +15,12 @@ export function csrfMiddleware(req: Request, res: Response, next: NextFunction) 
   res.locals.csrfToken = token;
   req.csrfToken = () => token;
 
-  // Lewati validasi untuk metode baca aman
-  if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
+  // Lewati validasi untuk metode baca aman dan endpoint API (ditangani Bearer / Sanctum guard)
+  if (
+    ['GET', 'HEAD', 'OPTIONS'].includes(req.method) ||
+    req.path.startsWith('/api/') ||
+    req.originalUrl.startsWith('/api/')
+  ) {
     return next();
   }
 

@@ -191,6 +191,20 @@ CREATE TABLE arsip_migrasi (
  diarsipkan_pada DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE personal_access_tokens (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ id_user BIGINT UNSIGNED NOT NULL,
+ name VARCHAR(100) NOT NULL DEFAULT 'api-client',
+ token_hash CHAR(64) NOT NULL UNIQUE,
+ abilities JSON NULL,
+ terakhir_dipakai_pada DATETIME NULL,
+ kedaluwarsa_pada DATETIME NULL,
+ dibuat_pada DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ KEY ix_pat_user (id_user),
+ KEY ix_pat_expiry (kedaluwarsa_pada),
+ FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE VIEW v_kapasitas_kendaraan AS
  SELECT k.id,k.jenis,k.nomor_polisi,COUNT(CASE WHEN s.aktif=1 THEN 1 END) AS kapasitas
  FROM kendaraan k LEFT JOIN kursi_kendaraan s ON s.id_kendaraan=k.id GROUP BY k.id;

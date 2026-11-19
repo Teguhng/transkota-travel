@@ -24,6 +24,9 @@ declare global {
     interface Request {
       user?: SessionUser;
       csrfToken?: () => string;
+      authTokenId?: number;
+      authMethod?: 'bearer' | 'session';
+      authAbilities?: string[];
     }
   }
 }

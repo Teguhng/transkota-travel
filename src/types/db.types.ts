@@ -171,3 +171,14 @@ export interface ArsipMigrasiRow {
   diarsipkan_pada: Date;
 }
 
+export interface PersonalAccessTokenRow {
+  id: number;
+  id_user: number;
+  name: string;
+  token_hash: string;
+  abilities: string[] | string | null;
+  terakhir_dipakai_pada: Date | null;
+  kedaluwarsa_pada: Date | null;
+  dibuat_pada: Date;
+}
+
