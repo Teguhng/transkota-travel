@@ -9,6 +9,7 @@
     "build": "tsc && npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --minify",
     "typecheck": "tsc --noEmit",
     "start": "node dist/server.js",
+    "db:init": "tsx src/scripts/initDb.ts",
     "seed:passwords": "tsx src/scripts/seedPasswords.ts",
     "seed:demo-schedules": "tsx src/scripts/seedDemoSchedules.ts",
     "test": "vitest run"
