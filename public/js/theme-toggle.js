@@ -11,13 +11,25 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
+    const root = document.documentElement;
+    let transitionFrame;
     // Sinkronkan ikon dengan tema awal
   const isInitialDark = document.documentElement.classList.contains('dark');
   toggleBtns.forEach((btn) => updateIcon(btn, isInitialDark));
 
   toggleBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
-        const isDark = document.documentElement.classList.toggle('dark');
+        cancelAnimationFrame(transitionFrame);
+        root.classList.add('theme-switching');
+        const isDark = root.classList.toggle('dark');
+
+        // Let the browser paint the new theme before restoring hover transitions.
+        transitionFrame = requestAnimationFrame(() => {
+          transitionFrame = requestAnimationFrame(() => {
+            root.classList.remove('theme-switching');
+          });
+        });
+
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
         updateIcon(btn, isDark);
       });

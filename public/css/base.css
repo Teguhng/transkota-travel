@@ -35,6 +35,11 @@ button:disabled, input:disabled, select:disabled, textarea:disabled, [aria-disab
   cursor: not-allowed !important;
 }
 
+html.theme-switching, html.theme-switching *,
+html.theme-switching *::before, html.theme-switching *::after {
+  transition: none !important;
+}
+
 [data-slot] { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--color-paper-2, var(--color-paper)), var(--color-paper-3, var(--color-paper))); }
 [data-slot] > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: saturate(0.88) contrast(1.1); }
 [data-slot]:has(> img) > :not(img):not([data-keep]) { display: none !important; }

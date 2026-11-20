@@ -7,6 +7,23 @@ import websockets
 SCREENSHOT_DIR = "shots"
 os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 
+THEME_TOGGLE_CHECK = """
+(() => {
+    const root = document.documentElement;
+    const wasDark = root.classList.contains('dark');
+    document.querySelector('.theme-toggle-btn').click();
+    const isDark = root.classList.contains('dark');
+    const colorTransitions = document.getAnimations().filter(animation =>
+        animation instanceof CSSTransition && animation.transitionProperty.endsWith('color')
+    );
+    return {
+        switched: isDark !== wasDark,
+        saved: localStorage.getItem('theme') === (isDark ? 'dark' : 'light'),
+        colorTransitions: colorTransitions.length,
+    };
+})()
+"""
+
 class CDPClient:
     def __init__(self, ws_url):
         self.ws_url = ws_url
@@ -50,6 +67,11 @@ class CDPClient:
             f.write(base64.b64decode(res["data"]))
         print(f"[SCREENSHOT] Saved: {path}")
 
+    async def toggle_theme(self):
+        result = await self.evaluate(THEME_TOGGLE_CHECK)
+        if not result or not result["switched"] or not result["saved"] or result["colorTransitions"]:
+            raise AssertionError(f"Theme must switch and save without color transitions: {result}")
+
 async def main():
     tabs = json.loads(urllib.request.urlopen("http://127.0.0.1:9222/json").read())
     page_tab = next(t for t in tabs if t.get("type") == "page")
@@ -67,18 +89,14 @@ async def main():
     # 2. Homepage & Theme Toggle Verification
     print("\n[STEP 1] Testing Homepage & Hallmark Themes (Dark & Light)...")
     await client.navigate("http://localhost:3000/")
+    if not await client.evaluate("document.documentElement.classList.contains('dark')"):
+        await client.toggle_theme()
     await client.capture_screenshot("01_homepage_dark.png")
     
-    # Toggle to Light mode
-    await client.evaluate("document.querySelector('.theme-toggle-btn').click()")
-    await asyncio.sleep(0.4)
-    is_dark = await client.evaluate("document.documentElement.classList.contains('dark')")
-    print(f"Theme toggle result: dark={is_dark}")
+    await client.toggle_theme()
     await client.capture_screenshot("02_homepage_light.png")
 
-    # Toggle back to Dark mode
-    await client.evaluate("document.querySelector('.theme-toggle-btn').click()")
-    await asyncio.sleep(0.4)
+    await client.toggle_theme()
 
     # 3. Schedule Catalog (Public)
     print("\n[STEP 2] Testing Schedule Catalog...")
