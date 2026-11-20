@@ -1,32 +1,75 @@
+import path from 'path';
+import { pathToFileURL } from 'url';
 import bcrypt from 'bcryptjs';
+import { RowDataPacket, ResultSetHeader } from 'mysql2/promise';
 import { pool } from '../config/database.js';
 
-async function main() {
-  console.log('Seeding initial passwords for demo accounts...');
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash('Password123!', salt);
+const DEMO_ACCOUNTS = ['admin_1', 'operator_1', 'aziz'] as const;
+const DEFAULT_DEMO_PASSWORD = 'Password123!';
 
-  // Set default password for admin_1, operator_1, and aziz
-  const demoAccounts = ['admin_1', 'operator_1', 'aziz'];
-  for (const username of demoAccounts) {
-    const [res]: any = await pool.query(
-      `UPDATE users SET password_hash = ?, wajib_reset_password = 0 WHERE username = ?`,
-      [hash, username]
+interface PendingUserRow extends RowDataPacket {
+  username: string;
+}
+
+export interface SeedPasswordsOptions {
+  force?: boolean;
+}
+
+export async function ensureDemoPasswordsSeeded(
+  options: SeedPasswordsOptions = {}
+): Promise<number> {
+  const force = Boolean(options.force);
+  const placeholders = DEMO_ACCOUNTS.map(() => '?').join(', ');
+
+  let targetUsernames: string[] = [...DEMO_ACCOUNTS];
+  if (!force) {
+    const [pendingRows] = await pool.query<PendingUserRow[]>(
+      `SELECT username FROM users WHERE username IN (${placeholders}) AND password_hash IS NULL`,
+      [...DEMO_ACCOUNTS]
     );
-    console.log(`Updated account [${username}]: ${res.affectedRows} row(s) updated.`);
+    targetUsernames = pendingRows.map((row) => row.username);
+    if (targetUsernames.length === 0) {
+      console.log('[SeedPasswords] Password akun demo sudah aktif. Dilewati.');
+      return 0;
+    }
   }
 
-  // Ensure operator_1 has a phone number so walkin & user lookups operate smoothly
-  await pool.query(
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(DEFAULT_DEMO_PASSWORD, salt);
+
+  const targetPlaceholders = targetUsernames.map(() => '?').join(', ');
+  const whereClause = force
+    ? `username IN (${targetPlaceholders})`
+    : `username IN (${targetPlaceholders}) AND password_hash IS NULL`;
+
+  const [updateResult] = await pool.query<ResultSetHeader>(
+    `UPDATE users SET password_hash = ?, wajib_reset_password = 0 WHERE ${whereClause}`,
+    [hash, ...targetUsernames]
+  );
+
+  await pool.query<ResultSetHeader>(
     `UPDATE users SET telepon = '081299990001' WHERE username = 'operator_1' AND telepon IS NULL`
   );
 
-  console.log('Demo passwords seeded successfully! Default password is: Password123!');
-  await pool.end();
+  const updatedRows = Number(updateResult.affectedRows ?? 0);
+  console.log(
+    `[SeedPasswords] Berhasil mengaktifkan password default untuk ${updatedRows} akun demo (${targetUsernames.join(', ')}).`
+  );
+  return updatedRows;
 }
 
-main().catch((err) => {
-  console.error('Failed to seed passwords:', err);
-  process.exit(1);
-});
+const isDirectRun =
+  process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
 
+if (isDirectRun) {
+  ensureDemoPasswordsSeeded({ force: true })
+    .then(async () => {
+      await pool.end();
+      process.exit(0);
+    })
+    .catch(async (err) => {
+      console.error('[SeedPasswords] Failed to seed passwords:', err);
+      await pool.end();
+      process.exit(1);
+    });
+}

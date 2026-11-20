@@ -11,6 +11,15 @@ import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js
 import { appRouter } from './routes/index.js';
 import { startExpiryWorker, stopExpiryWorker } from './services/expiry.worker.js';
 import { pool } from './config/database.js';
+import { ensureDatabaseInitialized } from './scripts/initDb.js';
+import { ensureUpcomingSchedules } from './scripts/seedDemoSchedules.js';
+import { ensureDemoPasswordsSeeded } from './scripts/seedPasswords.js';
+import { getAssetVersion } from './utils/assetVersion.js';
+
+const assetVersions = {
+  css: getAssetVersion('css/output.css'),
+  themeJs: getAssetVersion('js/theme-toggle.js'),
+};
 
 export const app = express();
 
@@ -101,6 +110,7 @@ app.use((req, res, next) => {
   res.locals.user = req.session?.user || null;
   res.locals.csrfToken = req.session?.csrfToken || '';
   res.locals.currentPath = req.path;
+  res.locals.assetVersions = assetVersions;
   res.locals.flash =
     typeof req.flash === 'function'
       ? {
@@ -119,22 +129,36 @@ app.use(appRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-// Inisialisasi background worker pembersih kursi kedaluwarsa
-startExpiryWorker(env.EXPIRY_INTERVAL_MS);
-
-// Mulai HTTP server
+// Inisialisasi schema database (idempoten) lalu jalankan worker & HTTP server
 const PORT = env.PORT || 3000;
-const server = app.listen(PORT, () => {
-  console.log(`[Server] Travel Booking Monolith berjalan aktif pada http://localhost:${PORT}`);
-  console.log(`[Environment] Mode: ${env.NODE_ENV} | Database: ${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`);
-});
+let server: ReturnType<typeof app.listen> | null = null;
+
+async function bootstrap() {
+  try {
+    await ensureDatabaseInitialized();
+    await ensureDemoPasswordsSeeded();
+    await ensureUpcomingSchedules(60);
+  } catch (err) {
+    console.error('[Bootstrap] Gagal menginisialisasi database:', err);
+    process.exit(1);
+  }
+
+  startExpiryWorker(env.EXPIRY_INTERVAL_MS);
+
+  server = app.listen(PORT, () => {
+    console.log(`[Server] Travel Booking Monolith berjalan aktif pada http://localhost:${PORT}`);
+    console.log(`[Environment] Mode: ${env.NODE_ENV} | Database: ${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`);
+  });
+}
+
+bootstrap();
 
 // Graceful shutdown handling
 const handleGracefulShutdown = async (signal: string) => {
   console.log(`[Server] Menerima sinyal ${signal}. Memulai penutupan server secara bertahap...`);
   stopExpiryWorker();
 
-  server.close(async () => {
+  const closeConnections = async () => {
     console.log('[Server] Koneksi HTTP tertutup.');
     try {
       await sessionStore.close().catch(() => {});
@@ -145,7 +169,13 @@ const handleGracefulShutdown = async (signal: string) => {
       console.error('[Database] Gagal menutup pool koneksi:', err);
       process.exit(1);
     }
-  });
+  };
+
+  if (server) {
+    server.close(closeConnections);
+  } else {
+    await closeConnections();
+  }
 };
 
 process.on('SIGTERM', () => handleGracefulShutdown('SIGTERM'));

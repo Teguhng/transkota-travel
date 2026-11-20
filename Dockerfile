@@ -23,6 +23,7 @@ RUN npm install --omit=dev
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/views ./views
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/db_tiket.sql ./db_tiket.sql
 
 EXPOSE 3000
 
