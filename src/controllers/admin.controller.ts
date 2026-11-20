@@ -5,7 +5,11 @@ import { kendaraanRepository } from '../repositories/kendaraan.repository.js';
 import { jadwalRepository } from '../repositories/jadwal.repository.js';
 import { userRepository } from '../repositories/user.repository.js';
 import { keluhanRepository } from '../repositories/keluhan.repository.js';
-import { UserRole } from '../types/db.types.js';
+import { KotaRow, RuteRow, KendaraanRow, JadwalRow, UserRole } from '../types/db.types.js';
+import { buildPaginationMeta, paginateItems, PaginationMeta } from '../utils/pagination.js';
+
+const MASTER_TABS = new Set(['jadwal', 'rute', 'kendaraan', 'kota']);
+const ADMIN_MASTER_PAGE_SIZE = 12;
 
 export class AdminController {
   async dashboard(req: Request, res: Response, next: NextFunction) {
@@ -22,11 +26,47 @@ export class AdminController {
 
   async masterData(req: Request, res: Response, next: NextFunction) {
     try {
-      const tab = (req.query.tab as string) || 'jadwal';
-      const cities = await ruteRepository.getAllCities();
-      const routes = await ruteRepository.getAllRoutes();
-      const vehicles = await kendaraanRepository.getAllVehicles();
-      const schedules = await jadwalRepository.getAllSchedulesAdmin();
+      const rawTab = typeof req.query.tab === 'string' ? req.query.tab : 'jadwal';
+      const tab = MASTER_TABS.has(rawTab) ? rawTab : 'jadwal';
+      const requestedPage = Math.max(1, Number.parseInt(String(req.query.page || '1'), 10) || 1);
+
+      let cities: KotaRow[] = [];
+      let routes: RuteRow[] = [];
+      let vehicles: (KendaraanRow & { kapasitas?: number })[] = [];
+      let schedules: JadwalRow[] = [];
+      let pagination: PaginationMeta = buildPaginationMeta(0, 1, ADMIN_MASTER_PAGE_SIZE);
+
+      if (tab === 'jadwal') {
+        const [allRoutes, allVehicles, pagedSchedules] = await Promise.all([
+          ruteRepository.getAllRoutes(),
+          kendaraanRepository.getAllVehicles(),
+          jadwalRepository.getSchedulesAdminPaginated(requestedPage, ADMIN_MASTER_PAGE_SIZE),
+        ]);
+        routes = allRoutes;
+        vehicles = allVehicles;
+        schedules = pagedSchedules.items;
+        pagination = pagedSchedules.pagination;
+      } else if (tab === 'rute') {
+        const [allCities, allRoutes] = await Promise.all([
+          ruteRepository.getAllCities(),
+          ruteRepository.getAllRoutes(),
+        ]);
+        const pagedRoutes = paginateItems(allRoutes, requestedPage, ADMIN_MASTER_PAGE_SIZE);
+        cities = allCities;
+        routes = pagedRoutes.items;
+        pagination = pagedRoutes.pagination;
+      } else if (tab === 'kendaraan') {
+        const allVehicles = await kendaraanRepository.getAllVehicles();
+        const pagedVehicles = paginateItems(allVehicles, requestedPage, ADMIN_MASTER_PAGE_SIZE);
+        vehicles = pagedVehicles.items;
+        pagination = pagedVehicles.pagination;
+      } else if (tab === 'kota') {
+        const allCities = await ruteRepository.getAllCities();
+        const newestCities = [...allCities].sort((a, b) => b.id - a.id);
+        const pagedCities = paginateItems(newestCities, requestedPage, ADMIN_MASTER_PAGE_SIZE);
+        cities = pagedCities.items;
+        pagination = pagedCities.pagination;
+      }
 
       res.render('admin/master-data', {
         title: 'Manajemen Data Master Sistem Travel',
@@ -34,7 +74,8 @@ export class AdminController {
         cities,
         routes,
         vehicles,
-        schedules
+        schedules,
+        pagination
       });
     } catch (err) {
       next(err);
@@ -89,8 +130,9 @@ export class AdminController {
 
       throw new Error('Entitas tidak dikenali.');
     } catch (err: any) {
+      const fallbackTab = MASTER_TABS.has(req.params.entity) ? req.params.entity : 'jadwal';
       req.flash('error', err.message || 'Gagal menyimpan perubahan data master.');
-      res.redirect('/admin/master');
+      res.redirect(`/admin/master?tab=${fallbackTab}`);
     }
   }
 

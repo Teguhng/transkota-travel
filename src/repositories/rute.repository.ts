@@ -86,7 +86,7 @@ export class RuteRepository {
       FROM rute r
       JOIN kota ka ON ka.id = r.id_kota_asal
       JOIN kota kt ON kt.id = r.id_kota_tujuan
-      ORDER BY ka.nama ASC, kt.nama ASC
+      ORDER BY r.id DESC
     `;
 
     this.routesInFlight = pool

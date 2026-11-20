@@ -1,6 +1,7 @@
 import { pool } from '../config/database.js';
 import { JadwalRow, JadwalKursiRow } from '../types/db.types.js';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { buildPaginationMeta, PaginatedResult } from '../utils/pagination.js';
 
 export class JadwalRepository {
   async getActiveSchedules(
@@ -61,11 +62,44 @@ export class JadwalRepository {
       JOIN kendaraan k ON k.id = j.id_kendaraan
       LEFT JOIN jadwal_kursi s ON s.id_jadwal = j.id
       GROUP BY j.id
-      ORDER BY j.berangkat_pada DESC
+      ORDER BY j.id DESC
       LIMIT 100
     `;
     const [rows] = await pool.query<RowDataPacket[]>(sql);
     return rows as JadwalRow[];
+  }
+
+  async getSchedulesAdminPaginated(
+    requestedPage = 1,
+    pageSize = 12
+  ): Promise<PaginatedResult<JadwalRow>> {
+    const [countRows] = await pool.query<RowDataPacket[]>(
+      'SELECT COUNT(*) AS total FROM jadwal'
+    );
+    const total = Number(countRows[0]?.total ?? 0);
+    const pagination = buildPaginationMeta(total, requestedPage, pageSize);
+    const offset = (pagination.page - 1) * pagination.pageSize;
+
+    const sql = `
+      SELECT j.id, j.id_rute, j.id_kendaraan, j.berangkat_pada, j.tiba_pada, j.harga, j.status,
+             ka.nama AS kota_asal, kt.nama AS kota_tujuan,
+             k.jenis AS nama_kendaraan, k.nomor_polisi,
+             COUNT(CASE WHEN s.status = 'tersedia' THEN 1 END) AS kursi_tersedia
+      FROM jadwal j
+      JOIN rute r ON r.id = j.id_rute
+      JOIN kota ka ON ka.id = r.id_kota_asal
+      JOIN kota kt ON kt.id = r.id_kota_tujuan
+      JOIN kendaraan k ON k.id = j.id_kendaraan
+      LEFT JOIN jadwal_kursi s ON s.id_jadwal = j.id
+      GROUP BY j.id
+      ORDER BY j.id DESC
+      LIMIT ? OFFSET ?
+    `;
+    const [rows] = await pool.query<RowDataPacket[]>(sql, [pagination.pageSize, offset]);
+    return {
+      items: rows as JadwalRow[],
+      pagination,
+    };
   }
 
   async getScheduleById(id: number): Promise<JadwalRow | null> {

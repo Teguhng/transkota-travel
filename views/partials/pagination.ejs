@@ -1,0 +1,45 @@
+<% if (pagination && pagination.totalItems > 0) { %>
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 border-t-bar border-rule bg-paper-3 text-xs">
+    <div class="text-muted font-bold">
+      Menampilkan <span class="text-ink num"><%= pagination.startItem %>&ndash;<%= pagination.endItem %></span> dari <span class="text-ink num"><%= pagination.totalItems %></span> data
+    </div>
+
+    <% if (pagination.totalPages > 1) { %>
+      <nav aria-label="Navigasi halaman" class="flex flex-wrap items-center gap-1 font-bold">
+        <% if (pagination.hasPrev) { %>
+          <a href="/admin/master?tab=<%= tab %>&page=<%= pagination.page - 1 %>" class="px-2.5 py-1 border-hair border-rule bg-paper text-ink hover:bg-paper-2 uppercase">
+            &laquo; Prev
+          </a>
+        <% } else { %>
+          <span class="px-2.5 py-1 border-hair border-rule bg-paper text-muted opacity-50 uppercase cursor-not-allowed">
+            &laquo; Prev
+          </span>
+        <% } %>
+
+        <% pagination.pages.forEach(p => { %>
+          <% if (p === '...') { %>
+            <span class="px-2 py-1 text-muted">...</span>
+          <% } else if (p === pagination.page) { %>
+            <span aria-current="page" class="px-2.5 py-1 border-hair border-rule bg-ink text-paper num">
+              <%= p %>
+            </span>
+          <% } else { %>
+            <a href="/admin/master?tab=<%= tab %>&page=<%= p %>" class="px-2.5 py-1 border-hair border-rule bg-paper text-ink hover:bg-paper-2 num">
+              <%= p %>
+            </a>
+          <% } %>
+        <% }) %>
+
+        <% if (pagination.hasNext) { %>
+          <a href="/admin/master?tab=<%= tab %>&page=<%= pagination.page + 1 %>" class="px-2.5 py-1 border-hair border-rule bg-paper text-ink hover:bg-paper-2 uppercase">
+            Next &raquo;
+          </a>
+        <% } else { %>
+          <span class="px-2.5 py-1 border-hair border-rule bg-paper text-muted opacity-50 uppercase cursor-not-allowed">
+            Next &raquo;
+          </span>
+        <% } %>
+      </nav>
+    <% } %>
+  </div>
+<% } %>
