@@ -13,25 +13,31 @@
     const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
     const root = document.documentElement;
     let transitionFrame;
-    // Sinkronkan ikon dengan tema awal
-  const isInitialDark = document.documentElement.classList.contains('dark');
-  toggleBtns.forEach((btn) => updateIcon(btn, isInitialDark));
 
-  toggleBtns.forEach((btn) => {
+    // Sinkronkan ikon dengan tema awal
+    const isInitialDark = root.classList.contains('dark');
+    toggleBtns.forEach((btn) => updateIcon(btn, isInitialDark));
+
+    toggleBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         cancelAnimationFrame(transitionFrame);
         root.classList.add('theme-switching');
-        const isDark = root.classList.toggle('dark');
+        // Pastikan aturan transition: none !important sudah terhitung sebelum kelas .dark berubah
+        void window.getComputedStyle(root).color;
 
-        // Let the browser paint the new theme before restoring hover transitions.
+        const isDark = root.classList.toggle('dark');
+        // Flush style tema baru selagi transisi masih nonaktif agar tidak ada komponen yang tertinggal
+        void window.getComputedStyle(root).color;
+
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        toggleBtns.forEach((toggleBtn) => updateIcon(toggleBtn, isDark));
+
+        // Kembalikan hover transitions setelah browser selesai mengecat tema baru
         transitionFrame = requestAnimationFrame(() => {
           transitionFrame = requestAnimationFrame(() => {
             root.classList.remove('theme-switching');
           });
         });
-
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        updateIcon(btn, isDark);
       });
     });
 

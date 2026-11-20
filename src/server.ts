@@ -14,6 +14,12 @@ import { pool } from './config/database.js';
 import { ensureDatabaseInitialized } from './scripts/initDb.js';
 import { ensureUpcomingSchedules } from './scripts/seedDemoSchedules.js';
 import { ensureDemoPasswordsSeeded } from './scripts/seedPasswords.js';
+import { getAssetVersion } from './utils/assetVersion.js';
+
+const assetVersions = {
+  css: getAssetVersion('css/output.css'),
+  themeJs: getAssetVersion('js/theme-toggle.js'),
+};
 
 export const app = express();
 
@@ -104,6 +110,7 @@ app.use((req, res, next) => {
   res.locals.user = req.session?.user || null;
   res.locals.csrfToken = req.session?.csrfToken || '';
   res.locals.currentPath = req.path;
+  res.locals.assetVersions = assetVersions;
   res.locals.flash =
     typeof req.flash === 'function'
       ? {
